@@ -6,7 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title')</title>
 
-    @yield('styles')
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,6 +19,8 @@
     <link rel="stylesheet" href="{{ asset('assets/css/owl.carousel.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{ asset('assets/css/slicknav.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{ asset('assets/dist/style.css')}}" type="text/css">
+
+    @yield('styles')
 
     <style>
         body {
