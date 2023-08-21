@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -60,3 +61,4 @@ Route::middleware('loginUser')->group( function () {
     } );
 } );
 
+Route::resource('/product', ProductController::class);
