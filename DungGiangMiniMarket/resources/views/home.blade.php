@@ -44,7 +44,7 @@
                             </div>
                             <div class="hero__search__phone__text">
                                 <h5>0329 267 878</h5>
-                                <span>hỗ trợ 24/7</span>
+                                <span>Hỗ trợ 24/7</span>
                             </div>
                         </div>
                     </div>

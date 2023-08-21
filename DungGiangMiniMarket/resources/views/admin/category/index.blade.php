@@ -15,10 +15,28 @@
             class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
 </div>
 
+@if (session('success'))
+    <div class="alert alert-success" role="alert">
+        {{ session('success') }}
+        <button type=" button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+@endif
+
+@if (session('error'))
+    <div class="alert alert-danger" role="alert">
+        {{ session('error') }}
+        <button type=" button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+@endif
+
 <div class="card shadow mb-4">
     <div class="card-header has-add py-3">
         <h6 class="m-0 font-weight-bold text-primary">Danh sách loại hàng</h6>
-        <a href="" class="btn btn-sm btn-primary shadow-sm">Thêm loại hàng</a>
+        <a href="{{ route('admin.category.create') }}" class="btn btn-sm btn-primary shadow-sm">Thêm loại hàng</a>
     </div>
     <div class="card-body">
         <div class="table-reponsive">
@@ -36,8 +54,8 @@
                             <td>{{$item->id}}</td>
                             <td>{{$item->name}}</td>
                             <td>
-                                <a href="{{ route( 'category.edit', $item->id ) }}" class="btn btn-sm btn-success">Sửa</a>
-                                <form action="{{ route( 'category.destroy', $item->id ) }}" method="post">
+                                <a href="{{ route( 'admin.category.edit', $item->id ) }}" class="btn btn-sm btn-success">Sửa</a>
+                                <form action="{{ route( 'admin.category.destroy', $item->id ) }}" method="post">
                                     @csrf
                                     @method('DELETE')
                                     <input type="submit" value="Xóa" class="btn btn-sm btn-danger">

@@ -43,15 +43,40 @@
         </div>
         <div class="humberger__menu__cart">
             <ul>
-                <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
                 <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
             </ul>
             <div class="header__cart__price">Vật phẩm: <span>$150.00</span></div>
         </div>
         <div class="humberger__menu__widget">
-            <div class="header__top__right__auth">
-                <a href="#"><i class="fa fa-user"></i> Đăng nhập</a>
+            @if ( ! isset($user) || (json_decode($user) === null) )
+                <div class="header__top__right__auth">
+                    <a href="{{ route('login')}}"><i class="fa fa-user"></i> Đăng nhập</a>
+                    <a href="{{ route('register') }}"><i class="fa fa-user"></i> Đăng ký</a>
+                </div>
+            @else
+            <div class="header__top__right_auth">
+                <div class="dropdown">
+                    <button class=" btn dropdown-toggle" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-user"> {{ json_decode($user)->username }}</i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" href="#">
+                            <i class="fa fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Thông tin tài khoản
+                        </a>
+                        <a class="dropdown-item" href="#">
+                            <i class="fa fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Đổi mật khẩu
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ route('logout') }}">
+                            <i class="fa fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Đăng xuất
+                        </a>
+                      </div>
+                </div>
             </div>
+            @endif
         </div>
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
@@ -69,12 +94,6 @@
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
-        <div class="header__top__right__social">
-            <a href="#"><i class="fa fa-facebook"></i></a>
-            <a href="#"><i class="fa fa-twitter"></i></a>
-            <a href="#"><i class="fa fa-linkedin"></i></a>
-            <a href="#"><i class="fa fa-pinterest-p"></i></a>
-        </div>
         <div class="humberger__menu__contact">
             <ul>
                 <li><i class="fa fa-envelope"></i> dunggiang@gmail.com</li>
@@ -98,17 +117,40 @@
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6">
-                        <div class="header__top__right">
-                            <div class="header__top__right__social">
-                                <a href="#"><i class="fa fa-facebook"></i></a>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                                <a href="#"><i class="fa fa-linkedin"></i></a>
-                                <a href="#"><i class="fa fa-pinterest-p"></i></a>
+                        @if ( ! isset($user) || (json_decode($user) === null) )
+                            <div class="header__top__right">
+                                <div class="header__top__right__social">
+                                    <a href="{{ route('register') }}"><i class="fa fa-user"></i> Đăng ký</a>
+                                </div>
+                                <div class="header__top__right__auth">
+                                    <a href="{{ route('login') }}"><i class="fa fa-user"></i> Đăng nhập</a>
+                                </div>
                             </div>
-                            <div class="header__top__right__auth">
-                                <a href="#"><i class="fa fa-user"></i> Đăng nhập</a>
+                        @else
+                            <div class="header__top__right">
+                                <div class="dropdown">
+                                    <button class=" btn dropdown-toggle" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa fa-user"> {{ json_decode($user)->username }}</i>
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="userDropdown">
+                                        <a class="dropdown-item" href="#">
+                                            <i class="fa fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                            Thông tin tài khoản
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="fa fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                            Đổi mật khẩu
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="{{ route('logout') }}">
+                                            <i class="fa fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                            Đăng xuất
+                                        </a>
+                                      </div>
+                                </div>
                             </div>
-                        </div>
+                        @endif
+                       
                     </div>
                 </div>
             </div>
@@ -224,7 +266,7 @@
         <!-- Footer Section End -->
 
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
-    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/js/jquery.nice-select.min.js') }}"></script>
     <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('assets/js/jquery.slicknav.js') }}"></script>
