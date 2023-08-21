@@ -1,5 +1,6 @@
 <?php
 
+
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
@@ -37,6 +38,7 @@ Route::get('/shopping-cart', function () {
 });
 
 
+
 Route::get('login', [ UserController::class, 'login' ] )->name('login')->middleware('alreadyLogin');
 Route::get('logout', [ UserController::class, 'logout' ] )->name('logout');
 Route::post('handleLogin', [ UserController::class, 'handle_login' ] )->name('handleLogin');
@@ -57,3 +59,4 @@ Route::middleware('loginUser')->group( function () {
         
     } );
 } );
+
