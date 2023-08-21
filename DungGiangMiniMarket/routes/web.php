@@ -4,6 +4,7 @@
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,10 +20,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/checkout', function () {
     return view('checkout');
-});
-
-Route::get('/', function () {
-    return view('home');
 });
 
 Route::get('/contact', function () {
@@ -41,18 +38,27 @@ Route::get('/shopping-cart', function () {
     return view('shopping-cart');
 });
 
-Route::get('/admin', function () {
-    return view('admin.index');
-});
 
-Route::get('/login', function () {
-    return view('login');
-});
-Route::get('/register', function () {
-    return view('register');
-});
 
-Route::resource('/category', CategoryController::class);
-Route::resource('/cart', CartItemController::class);
+Route::get('login', [ UserController::class, 'login' ] )->name('login')->middleware('alreadyLogin');
+Route::get('logout', [ UserController::class, 'logout' ] )->name('logout');
+Route::post('handleLogin', [ UserController::class, 'handle_login' ] )->name('handleLogin');
+Route::get('register', [ UserController::class, 'register' ] )->name('register')->middleware('alreadyLogin');
+
+
+Route::middleware('loginAdmin')->group( function () {
+    Route::group ([ 'prefix' => 'admin', 'as' => 'admin.' ], function () {
+        Route::resource('category', CategoryController::class);
+        Route::resource('cart', CartItemController::class);
+        Route::get('dashboard', [UserController::class, 'index'])->name('dashboard');
+    } );
+} );
+
+Route::middleware('loginUser')->group( function () {
+    Route::get('/', [UserController::class, 'home'])->name('/');
+    Route::group ([ 'prefix' => 'user', 'as' => 'user.' ], function () {
+        
+    } );
+} );
 
 Route::resource('/product', ProductController::class);
