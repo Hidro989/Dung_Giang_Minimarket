@@ -164,7 +164,7 @@
 
         var addClassify = document.getElementById('add-classify');
         var classify = document.getElementsByClassName('classify');
-        let classify1Html = `<div class="input-group classify">
+        let classify1Html = `<div class="input-group classify1">
                     <div class="input-group-prepend">
                       <span class="input-group-text">Phân loại 1</span>
                     </div>
@@ -174,7 +174,7 @@
                         <button class="btn btn-danger deleteClassify" type="button">Xóa</button>
                     </div>
                 </div>`
-        let classify2Html = `<div class="input-group mt-3 classify">
+        let classify2Html = `<div class="input-group mt-3 classify2">
                 <div class="input-group-prepend">
                       <span class="input-group-text">Phân loại 2</span>
                     </div>
@@ -211,8 +211,10 @@
                 }
             }
         }
+
         function generateTable(){
-            
+            var classify1 = document.querySelector('.classify1');
+            var classify2 = document.querySelector('.classify2');
         }
         </script>
 @endsection
