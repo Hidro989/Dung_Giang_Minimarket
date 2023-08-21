@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,9 +40,11 @@ Route::get('/shop-grid', function () {
 Route::get('/shopping-cart', function () {
     return view('shopping-cart');
 });
+
 Route::get('/admin', function () {
     return view('admin.index');
 });
+
 Route::get('/login', function () {
     return view('login');
 });
@@ -52,3 +55,4 @@ Route::get('/register', function () {
 Route::resource('/category', CategoryController::class);
 Route::resource('/cart', CartItemController::class);
 
+Route::resource('/product', ProductController::class);
