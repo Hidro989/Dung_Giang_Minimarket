@@ -180,6 +180,7 @@ ol {
 	padding: 13px 30px 12px;
 	background: #7fad39;
 	border: none;
+	cursor: pointer;
 }
 
 /* Preloder */
@@ -397,12 +398,13 @@ ol {
 	display: inline-block;
 }
 
+.header__top__right__auth div,
 .header__top__right__auth a {
 	display: block;
 	font-size: 14px;
 	color: #1c1c1c;
 }
-
+.header__top__right__auth div i,
 .header__top__right__auth a i {
 	margin-right: 6px;
 }
@@ -3405,6 +3407,9 @@ ol {
 	}
 	.header__top {
 		display: none;
+	}
+	.header__logo a img {
+		width: 80%;
 	}
 	.header__menu {
 		display: none;
