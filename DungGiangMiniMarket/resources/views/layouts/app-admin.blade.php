@@ -45,7 +45,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="{{ route('admin.dashboard') }}">
                     <i class="fa fa-dashboard"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -63,8 +63,8 @@
                 </a>
                 <div id="collapseCategory" class="collapse" aria-labelledby="headingCategory" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item active" href="#">Danh sách loại hàng</a>
-                        <a class="collapse-item" href="cards.html">Thêm</a>
+                        <a class="collapse-item active" href="{{ route('admin.category.index') }}">Danh sách loại hàng</a>
+                        <a class="collapse-item" href="{{ route('admin.category.create') }}">Thêm</a>
                     </div>
                 </div>
             </li>
