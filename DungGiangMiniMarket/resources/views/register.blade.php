@@ -49,6 +49,11 @@
             color: #fff;
             background: #7fad39;
         }
+
+        .btn-site:hover {
+            color: #fff
+        }
+
     </style>
 </head>
 <body>
@@ -75,7 +80,10 @@
 
         <!-- Registeration Form -->
         <div class="col-md-7 col-lg-6 ml-auto">
-            <form action="#">
+            <form action="{{ route('handleRegister')  }}" method="POST">
+                @csrf
+                @method('POST')
+
                 <div class="row">
 
                     <!-- Name -->
@@ -85,17 +93,27 @@
                                 <i class="fa fa-user text-muted"></i>
                             </span>
                         </div>
-                        <input id="fullName" type="text" name="fullname" placeholder="Họ và tên" class="form-control bg-white border-left-0 border-md">
+                        <input id="fullName" type="text" name="fullname" placeholder="Họ và tên" class="form-control @error('fullname') is-invalid @enderror bg-white border-left-0 border-md" value="{{ old('fullname') }}">
+                        @error('fullname')
+                            <div class="invalid-feedback">
+                            {{ $message }}
+                            </div>
+                        @enderror
                     </div>
 
                     <!-- User Name -->
                     <div class="input-group col-lg-12 mb-4">
                         <div class="input-group-prepend">
                             <span class="input-group-text bg-white px-4 border-md border-right-0">
-                                <i class="fa fa-envelope text-muted"></i>
+                                <i class="fa fa-user-secret text-muted"></i>
                             </span>
                         </div>
-                        <input id="username" type="text" name="username" placeholder="Tên tài khoản" class="form-control bg-white border-left-0 border-md">
+                        <input id="username" type="text" name="username" placeholder="Tên tài khoản" class="form-control @error('username') is-invalid @enderror bg-white border-left-0 border-md" value="{{ old('username') }}">
+                        @error('username')
+                            <div class="invalid-feedback">
+                            {{ $message }}
+                            </div>
+                        @enderror
                     </div>
 
                     <!-- Phone Number -->
@@ -105,23 +123,63 @@
                                 <i class="fa fa-phone-square text-muted"></i>
                             </span>
                         </div>
-                        <input id="phoneNumber" type="tel" name="phone" placeholder="Số điện thoại" class="form-control bg-white border-md border-left-0 pl-3">
-                    </div>.
+                        <input id="phoneNumber" type="tel" name="phone" placeholder="Số điện thoại" class="form-control @error('phone') is-invalid @enderror bg-white border-md border-left-0 pl-3" value="{{ old('phone') }}">
+                        @error('phone')
+                            <div class="invalid-feedback">
+                            {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+
+                    <!-- Date of Birth -->
+                    <div class="input-group col-lg-12 mb-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                                <i class="fa fa-birthday-cake text-muted"></i>
+                            </span>
+                        </div>
+                        <input id="dateOfBirth" type="date" name="date_of_birth" class="form-control @error('date_of_birth') is-invalid @enderror bg-white border-md border-left-0 pl-3" value="{{ old('date_of_birth') }}">
+                        @error('date_of_birth')
+                            <div class="invalid-feedback">
+                            {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
 
 
-                    <!-- Job -->
+                    <!-- Gender -->
                     <div class="input-group col-lg-12 mb-4">
                         <div class="input-group-prepend">
                             <span class="input-group-text bg-white px-4 border-md border-right-0">
                                 <i class="fa fa-black-tie text-muted"></i>
                             </span>
                         </div>
-                        <select id="gender" name="gender" class="form-control custom-select bg-white border-left-0 border-md">
+                        <select id="gender" name="gender" class="form-control  @error('gender') is-invalid @enderror custom-select bg-white border-left-0 border-md">
                             <option value="">Giới tính</option>
-                            <option value="">Nam</option>
-                            <option value="">Nữ</option>
-                            <option value="">Khác</option>
+                            <option value="1" {{ old('gender') == 1 ? 'selected' : '' }}>Nam</option>
+                            <option value="2" {{ old('gender') == 2 ? 'selected' : '' }}>Nữ</option>
+                            <option value="3" {{ old('gender') == 3 ? 'selected' : '' }}>Khác</option>
                         </select>
+                        @error('gender')
+                            <div class="invalid-feedback">
+                            {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+
+                    <!-- Date of Birth -->
+                    <div class="input-group col-lg-12 mb-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                                <i class="fa fa-address-book text-muted"></i>
+                            </span>
+                        </div>
+                        <input id="address" type="text" name="address" class="form-control @error('address') is-invalid @enderror bg-white border-md border-left-0 pl-3" value="{{ old('address') }}" placeholder="Địa chỉ">
+                        @error('address')
+                            <div class="invalid-feedback">
+                            {{ $message }}
+                            </div>
+                        @enderror
                     </div>
 
                     <!-- Password -->
@@ -131,7 +189,12 @@
                                 <i class="fa fa-lock text-muted"></i>
                             </span>
                         </div>
-                        <input id="password" type="password" name="password" placeholder="Mật khẩu" class="form-control bg-white border-left-0 border-md">
+                        <input id="password" type="password" name="password" placeholder="Mật khẩu" class="form-control @error('password') is-invalid @enderror bg-white border-left-0 border-md" value="{{ old('password') }}">
+                        @error('password')
+                            <div class="invalid-feedback">
+                            {{ $message }}
+                            </div>
+                        @enderror
                     </div>
 
                     <!-- Password Confirmation -->
@@ -141,14 +204,23 @@
                                 <i class="fa fa-lock text-muted"></i>
                             </span>
                         </div>
-                        <input id="passwordConfirmation" type="text" name="passwordConfirmation" placeholder="Xác thực mật khẩu" class="form-control bg-white border-left-0 border-md">
+                        <input id="passwordConfirmation" type="password" name="password_confirmation" placeholder="Xác thực mật khẩu" class="form-control @error('password') is-invalid @enderror bg-white border-left-0 border-md" value="{{ old('password_confirmation') }}">
+                        @error('password')
+                            <div class="invalid-feedback">
+                            {{ $message }}
+                            </div>
+                        @enderror
                     </div>
-
+                    @if( session('error') )
+                      <div class="alert alert-danger">
+                        {{ session('error') }}
+                      </div>
+                    @endif
                     <!-- Submit Button -->
                     <div class="form-group col-lg-12 mx-auto mb-0">
-                        <a href="#" class="btn btn-site btn-block py-2">
-                            <span >Tạo tài khoản của bạn</span>
-                        </a>
+                        <button class="btn btn-site btn-block py-2" type="submit">
+                            <span>Tạo tài khoản của bạn</span>
+                        </button>
                     </div>
 
                     <!-- Already Registered -->
@@ -168,12 +240,22 @@
         'use strict';
 
         jQuery( document ).ready( function( $ ) {
+
             $('input, select').on('focus', function () {
                     $(this).parent().find('.input-group-text').css('border-color', '#80bdff');
-                });
-                $('input, select').on('blur', function () {
+            });
+
+            $('input, select').on('blur', function () {
                     $(this).parent().find('.input-group-text').css('border-color', '#ced4da');
-                });
+            });
+
+            function checkPassword() {
+                let passwordConfirmation = $('#passwordConfirmation');
+                let password = $('#password');
+                console.log(passwordConfirmation.val());
+                console.log(password.val());
+            }
+            checkPassword();
         });
     </script>
 </html>
