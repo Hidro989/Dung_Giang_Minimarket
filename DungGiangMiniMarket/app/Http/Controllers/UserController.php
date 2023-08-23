@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -64,18 +65,13 @@ class UserController extends Controller
         return view('login');
     }
 
-    public function index( Request $request ) {
-
-        $user = $request->cookie('user');
-        
-        View::share('user', $user );
+    public function index() {
         return view('admin.index');
     }
 
-    public function home( Request $request ) {
-        $user = $request->cookie('user');
-        View::share('user', $user);
-        return view('home');
+    public function home() {
+        $categories = Category::all();
+        return view('home', compact( 'categories' ));
     }
 
 
@@ -90,14 +86,14 @@ class UserController extends Controller
 
     public function handle_register( Request $request ) {
         $user = [
-            'fullname' => $request->input('fullname'),
-            'username' => $request->input('username'),
-            'password' => $request->input('password'),
-            'phone' => $request->input('phone'),
+            'fullname'      => $request->input('fullname'),
+            'username'      => $request->input('username'),
+            'password'      => $request->input('password'),
+            'phone'         => $request->input('phone'),
             'date_of_birth' => $request->input('date_of_birth'),
-            'gender' => $request->input('gender'),
-            'address' => $request->input('address'),
-            'role' => 1,
+            'gender'        => $request->input('gender'),
+            'address'       => $request->input('address'),
+            'role'          => 1,
         ];
 
 

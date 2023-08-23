@@ -1,3 +1,8 @@
+@php
+    use Illuminate\Support\Facades\Cookie;
+
+    $user = Cookie::get('user');
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,11 +65,11 @@
                         <i class="fa fa-user"> {{ json_decode($user)->username }}</i>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#userInfoModal">
                             <i class="fa fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                             Thông tin tài khoản
                         </a>
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#changePass">
                             <i class="fa fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                             Đổi mật khẩu
                         </a>
@@ -85,7 +90,7 @@
                 <li><a href="#">Trang</a>
                     <ul class="header__menu__dropdown">
                         <li><a href="./shop-details.html">Shop Details</a></li>
-                        <li><a href="./shoping-cart.html">Shoping Cart</a></li>
+                        <li><a href="{{ route('user.cart.index') }}">Giỏ hàng</a></li>
                         <li><a href="./checkout.html">Check Out</a></li>
                         <li><a href="./blog-details.html">Blog Details</a></li>
                     </ul>
@@ -133,11 +138,11 @@
                                         <i class="fa fa-user"> {{ json_decode($user)->username }}</i>
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="userDropdown">
-                                        <a class="dropdown-item" href="#">
+                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#userInfoModal">
                                             <i class="fa fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                             Thông tin tài khoản
                                         </a>
-                                        <a class="dropdown-item" href="#">
+                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#changePass">
                                             <i class="fa fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                             Đổi mật khẩu
                                         </a>
@@ -170,7 +175,7 @@
                             <li><a href="#">Trang</a>
                                 <ul class="header__menu__dropdown">
                                     <li><a href="./shop-details.html">Shop Details</a></li>
-                                    <li><a href="./shoping-cart.html">Shoping Cart</a></li>
+                                    <li><a href="{{ route('user.cart.index') }}">Shoping Cart</a></li>
                                     <li><a href="./checkout.html">Check Out</a></li>
                                     <li><a href="./blog-details.html">Blog Details</a></li>
                                 </ul>
@@ -179,15 +184,16 @@
                         </ul>
                     </nav>
                 </div>
+                @if ( isset($user) && (json_decode($user) !== null) )
                 <div class="col-lg-3">
                     <div class="header__cart">
                         <ul>
-                            {{-- <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li> --}}
-                            <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                            <li><a href="{{ route('user.cart.index') }}"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
                         </ul>
                         <div class="header__cart__price">Vật phẩm: <span>200k</span></div>
                     </div>
                 </div>
+                @endif
             </div>
             <div class="humberger__open">
                 <i class="fa fa-bars"></i>
@@ -207,40 +213,40 @@
                                 <a href="./index.html"><img src="img/logo.png" alt=""></a>
                             </div>
                             <ul>
-                                <li>Address: 60-49 Road 11378 New York</li>
-                                <li>Phone: +65 11.188.888</li>
+                                <li>Địa chỉ: Đại Từ, Thái Nguyên</li>
+                                <li>Số điện thoại: 0329 267 878</li>
                                 <li>Email: dunggiang@gmail.com</li>
                             </ul>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-6 offset-lg-1">
                         <div class="footer__widget">
-                            <h6>Useful Links</h6>
+                            <h6>Liên kết hữu ích</h6>
                             <ul>
-                                <li><a href="#">About Us</a></li>
-                                <li><a href="#">About Our Shop</a></li>
-                                <li><a href="#">Secure Shopping</a></li>
-                                <li><a href="#">Delivery infomation</a></li>
-                                <li><a href="#">Privacy Policy</a></li>
-                                <li><a href="#">Our Sitemap</a></li>
+                                <li><a href="#">Về chúng tôi</a></li>
+                                <li><a href="#">Về cửa hàng của chúng tôi</a></li>
+                                <li><a href="#">Mua sắm an toàn</a></li>
+                                <li><a href="#">Thông tin giao hàng</a></li>
+                                <li><a href="#">Chính sách bảo mật</a></li>
+                                <li><a href="#">Sơ đồ trang web của chúng tôi</a></li>
                             </ul>
                             <ul>
-                                <li><a href="#">Who We Are</a></li>
-                                <li><a href="#">Our Services</a></li>
-                                <li><a href="#">Projects</a></li>
-                                <li><a href="#">Contact</a></li>
-                                <li><a href="#">Innovation</a></li>
-                                <li><a href="#">Testimonials</a></li>
+                                <li><a href="#">Chúng ta là ai</a></li>
+                                <li><a href="#">Dịch vụ của chúng tôi</a></li>
+                                <li><a href="#">Dự án</a></li>
+                                <li><a href="#">Liên hệ</a></li>
+                                <li><a href="#">Sự đổi mới</a></li>
+                                <li><a href="#">Lời chứng thức</a></li>
                             </ul>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-12">
                         <div class="footer__widget">
-                            <h6>Join Our Newsletter Now</h6>
-                            <p>Get E-mail updates about our latest shop and special offers.</p>
+                            <h6>Tham gia Bản tin của chúng tôi ngay bây giờ</h6>
+                            <p>Nhận thông tin cập nhật qua email về cửa hàng mới nhất của chúng tôi và các ưu đãi đặc biệt.</p>
                             <form action="#">
-                                <input type="text" placeholder="Enter your mail">
-                                <button type="submit" class="site-btn">Subscribe</button>
+                                <input type="text" placeholder="Nhập email của bạn">
+                                <button type="submit" class="site-btn">Đăng ký</button>
                             </form>
                             <div class="footer__widget__social">
                                 <a href="#"><i class="fa fa-facebook"></i></a>
@@ -255,7 +261,7 @@
                     <div class="col-lg-12">
                         <div class="footer__copyright">
                             <div class="footer__copyright__text"><p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-      Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+      Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="#" target="_blank">HD Tech</a>
       <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p></div>
                             <div class="footer__copyright__payment"><img src="{{ asset('assets/img/payment-item.png') }}" alt=""></div>
                         </div>
@@ -264,6 +270,92 @@
             </div>
         </footer>
         <!-- Footer Section End -->
+
+    @php
+        $user = isset($user) && (json_decode($user) !== null) ? json_decode($user) : null;
+    @endphp
+    <!-- Logout Modal-->
+    <div class="modal fade" id="userInfoModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="userModalLabel">Thông tin tài khoản</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="">
+                        <div class="form-group">
+                            <label for="fullname">Tên người dùng</label>
+                            <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Nhập tên người dùng" value="{{ $user->fullname }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="userBirth">Ngày sinh</label>
+                            <input type="date" class="form-control" id="userBirth" name="date_of_birth" value="{{ $user->date_of_birth }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="userGender">Giới tính</label>
+                            <select id="userGender" class="wide form-control">
+                              <option value="1" {{ $user->gender == 1 ? 'selected' : '' }}>Nam</option>
+                              <option value="2" {{ $user->gender == 2 ? 'selected' : '' }}>Nữ</option>
+                              <option value="3" {{ $user->gender == 3 ? 'selected' : '' }}>Khác</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="userAddress">Địa chỉ</label>
+                            <input type="text" class="form-control" id="userAddress" name="address" placeholder="Nhập địa chỉ" value="{{ $user->address }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="userPhone">Số điện thoại</label>
+                            <input type="text" class="form-control" id="userPhone" name="phone" placeholder="Nhập số điện thoại" value="{{ $user->phone }}">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
+                    <a class="btn btn-primary" href="{{ route('logout') }}">Sửa</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="changePass" tabindex="-1" role="dialog" aria-labelledby="changePassword"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="changePassword">Đổi mật khẩu</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="">
+                        <div class="form-group">
+                            <label for="oldPass">Mật khẩu cũ</label>
+                            <input type="text" class="form-control" id="oldPass" name="oldpass" placeholder="Nhập mật khẩu cũ" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="newPass">Địa chỉ</label>
+                            <input type="text" class="form-control" id="newPass" name="password" placeholder="Nhập mật khẩu mới" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="password-confirmation">Số điện thoại</label>
+                            <input type="text" class="form-control" id="password-confirmation" name="password-confirmation" placeholder="Xác thực mật khẩu" value="">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
+                    <a class="btn btn-primary" href="{{ route('logout') }}">Đổi mật khẩu</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>

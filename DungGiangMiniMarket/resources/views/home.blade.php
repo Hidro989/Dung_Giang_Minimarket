@@ -12,17 +12,11 @@
                             <span>Danh mục</span>
                         </div>
                         <ul>
-                            <li><a href="#">Fresh Meat</a></li>
-                            <li><a href="#">Vegetables</a></li>
-                            <li><a href="#">Fruit & Nut Gifts</a></li>
-                            <li><a href="#">Fresh Berries</a></li>
-                            <li><a href="#">Ocean Foods</a></li>
-                            <li><a href="#">Butter & Eggs</a></li>
-                            <li><a href="#">Fastfood</a></li>
-                            <li><a href="#">Fresh Onion</a></li>
-                            <li><a href="#">Papayaya & Crisps</a></li>
-                            <li><a href="#">Oatmeal</a></li>
-                            <li><a href="#">Fresh Bananas</a></li>
+                            @if( ! empty($categories) )
+                                @foreach ($categories as $category)
+                                    <li><a href="#">{{$category->name}}</a></li>
+                                @endforeach
+                            @endif
                         </ul>
                     </div>
                 </div>
@@ -67,31 +61,15 @@
         <div class="container">
             <div class="row">
                 <div class="categories__slider owl-carousel">
-                    <div class="col-lg-3">
-                        <div class="categories__item set-bg" data-setbg="{{ asset('assets/img/categories/cat-1.jpg')}}">
-                            <h5><a href="#">Fresh Fruit</a></h5>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="categories__item set-bg" data-setbg="{{ asset('assets/img/categories/cat-2.jpg')}}">
-                            <h5><a href="#">Dried Fruit</a></h5>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="categories__item set-bg" data-setbg="{{ asset('assets/img/categories/cat-3.jpg')}}">
-                            <h5><a href="#">Vegetables</a></h5>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="categories__item set-bg" data-setbg="{{ asset('assets/img/categories/cat-4.jpg')}}">
-                            <h5><a href="#">drink fruits</a></h5>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="categories__item set-bg" data-setbg="{{ asset('assets/img/categories/cat-5.jpg')}}">
-                            <h5><a href="#">drink fruits</a></h5>
-                        </div>
-                    </div>
+                    @if( ! empty($categories) )
+                            @foreach ($categories as $category)
+                            <div class="col-lg-3">
+                                <div class="categories__item set-bg" data-setbg="{{ asset($category->image) }}">
+                                    <h5><a href="#">{{$category->name}}</a></h5>
+                                </div>
+                            </div>
+                            @endforeach
+                    @endif
                 </div>
             </div>
         </div>
@@ -104,7 +82,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title">
-                        <h2>Featured Product</h2>
+                        <h2>Sản phẩm nổi bật</h2>
                     </div>
                     <div class="featured__controls">
                         <ul>

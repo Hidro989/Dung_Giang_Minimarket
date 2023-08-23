@@ -34,10 +34,6 @@ Route::get('/shop-grid', function () {
     return view('shop-grid');
 });
 
-Route::get('/shopping-cart', function () {
-    return view('shopping-cart');
-});
-
 
 
 Route::get('login', [ UserController::class, 'login' ] )->name('login')->middleware('alreadyLogin');
@@ -50,7 +46,6 @@ Route::get('register', [ UserController::class, 'register' ] )->name('register')
 Route::middleware('loginAdmin')->group( function () {
     Route::group ([ 'prefix' => 'admin', 'as' => 'admin.' ], function () {
         Route::resource('category', CategoryController::class);
-        Route::resource('cart', CartItemController::class);
         Route::get('dashboard', [UserController::class, 'index'])->name('dashboard');
         Route::resource('product', ProductController::class);
     } );
@@ -59,6 +54,6 @@ Route::middleware('loginAdmin')->group( function () {
 Route::middleware('loginUser')->group( function () {
     Route::get('/', [UserController::class, 'home'])->name('/');
     Route::group ([ 'prefix' => 'user', 'as' => 'user.' ], function () {
-        
+        Route::resource('cart', CartItemController::class);
     } );
 } );

@@ -45,6 +45,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Tên loại hàng</th>
+                        <th>Đường dẫn ảnh</th>
                         <th>Hành động</th>
                     </tr>
                 </thead>
@@ -53,6 +54,7 @@
                         <tr>
                             <td>{{$item->id}}</td>
                             <td>{{$item->name}}</td>
+                            <td>{{$item->image}}</td>
                             <td>
                                 <a href="{{ route( 'admin.category.edit', $item->id ) }}" class="btn btn-sm btn-success">Sửa</a>
                                 <form action="{{ route( 'admin.category.destroy', $item->id ) }}" method="post">
