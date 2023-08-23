@@ -48,7 +48,7 @@ class CategoryController extends Controller
             [ 'name' => 'required|max:255' ],
             [
                  'name.required' => 'Vui lòng nhập tên loại hàng',
-                 'name.max' => 'Tên loại hàng không lớn hơn 255 kí tự'
+                 'name.max'      => 'Tên loại hàng không lớn hơn 255 kí tự'
             ],
         );
 
