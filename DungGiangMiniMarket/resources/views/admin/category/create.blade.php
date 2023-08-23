@@ -12,7 +12,7 @@
             <h6 class="m-0 font-weight-bold text-primary">Thêm loại hàng</h6>
         </div>
         <div class="card-body">
-            <form action="{{ route('admin.category.store') }}" class="needs-validation" method="POST" novalidate>
+            <form action="{{ route('admin.category.store') }}" class="needs-validation" method="POST" enctype="multipart/form-data" novalidate>
                 @csrf
                 <div class="form-group form-row">
                     <div class="col-md-6 mb-6">
@@ -26,6 +26,20 @@
                         @enderror
                     </div>
                 </div>
+
+                <div class="form-group form-row">
+                    <div class="col-md-6 mb-6">
+                        <label for="nameCategory">Ảnh loại hàng</label>
+                        <input type="file" name="image" id="imageCategory" class="form-control @error('image') is-invalid @enderror">
+                        
+                        @error('image')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+                </div>
+                
                 <button class="btn btn-primary" type="submit">Thêm</button>
             </form>
         </div>

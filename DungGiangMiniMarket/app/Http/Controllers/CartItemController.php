@@ -14,7 +14,6 @@ class CartItemController extends Controller
      */
     public function index()
     {
-        View::share('test', 'Cart');
         return view('shopping-cart');
     }
 

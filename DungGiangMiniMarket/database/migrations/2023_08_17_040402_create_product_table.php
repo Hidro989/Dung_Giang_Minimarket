@@ -23,7 +23,7 @@ class CreateProductTable extends Migration
             $table->string('unit_price')->nullable();
             $table->boolean('is_variant')->default(false);
             $table->string('attribute_ids')->nullable();
-            $table->integer('weight');
+            $table->float('weight');
             $table->integer('stock')->nullable();
         });
     }

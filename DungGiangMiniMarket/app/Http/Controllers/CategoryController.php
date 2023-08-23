@@ -43,17 +43,32 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $name = $request->input('name');
+        $imagePath = '';
+        $imageName = '';
+        $image = $request->file('image');
+        if( $request->hasFile('image') ){
+            $imageName = $image->getClientOriginalName();
+            $imagePath = $image->storeAs('assets/img/categories', $imageName, 'public');
+        }
+        
 
         $request->validate(
-            [ 'name' => 'required|max:255' ],
+            [ 
+                'name' => 'required|max:255',
+                'image' => 'required|image|max:2048' 
+            ],
             [
                  'name.required' => 'Vui lòng nhập tên loại hàng',
-                 'name.max' => 'Tên loại hàng không lớn hơn 255 kí tự'
+                 'name.max' => 'Tên loại hàng không lớn hơn 255 kí tự',
+                 'image.required' => 'Vui lòng chọn ảnh',
+                 'image.image' => 'Vui lòng chọn ảnh',
+                 'image.max' => 'Kích thước ảnh tối đa là 2MB'
             ],
         );
 
         try {
-            Category::insert([ 'name' => $name] );
+            Category::insert([ 'name' => $name, 'image' => $imagePath] );
+            $image->move('assets/img/categories', $imageName);
         }catch(\Throwable $th) {
             $name = $request->old('name');
             return redirect()->route('admin.category.create');
@@ -106,21 +121,39 @@ class CategoryController extends Controller
         
         $name = $request->input('name');
 
+        $imagePath = '';
+        $imageName = '';
+        $image = $request->file('image');
+        if( $request->hasFile('image') ){
+            $imageName = $image->getClientOriginalName();
+            $imagePath = $image->storeAs('assets/img/categories', $imageName, 'public');
+        }
+        
+
         $request->validate(
-            [ 'name' => 'required|max:255' ],
+            [ 
+                'name' => 'required|max:255',
+            ],
             [
                  'name.required' => 'Vui lòng nhập tên loại hàng',
-                 'name.max' => 'Tên loại hàng không lớn hơn 255 kí tự'
+                 'name.max' => 'Tên loại hàng không lớn hơn 255 kí tự',
             ],
         );
-
-        if( $name === $category->name ){
+        
+        if( $name === $category->name && $imagePath === $category->image ){
             return redirect()->route('admin.category.index');
+        }
+
+        $filePath = public_path($category->image);
+
+        if (file_exists($filePath)) {
+            unlink($filePath);
         }
 
         try {
 
-            DB::table('categories')->where('id', $id)->update(['name' => $name]);
+            DB::table('categories')->where('id', $id)->update(['name' => $name, 'image' => $imagePath]);
+            $image->move('assets/img/categories', $imageName);
 
         }catch(\Throwable $th) {
             $request->flash();
