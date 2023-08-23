@@ -63,6 +63,7 @@ class CategoryController extends Controller
                  'image.required' => 'Vui lòng chọn ảnh',
                  'image.image' => 'Vui lòng chọn ảnh',
                  'image.max' => 'Kích thước ảnh tối đa là 2MB'
+
             ],
         );
 
