@@ -43,6 +43,7 @@ Route::get('/shopping-cart', function () {
 Route::get('login', [ UserController::class, 'login' ] )->name('login')->middleware('alreadyLogin');
 Route::get('logout', [ UserController::class, 'logout' ] )->name('logout');
 Route::post('handleLogin', [ UserController::class, 'handle_login' ] )->name('handleLogin');
+Route::post('handleRegister', [ UserController::class, 'handle_register' ] )->name('handleRegister');
 Route::get('register', [ UserController::class, 'register' ] )->name('register')->middleware('alreadyLogin');
 
 
