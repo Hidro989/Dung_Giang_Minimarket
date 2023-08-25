@@ -275,6 +275,7 @@
         $user = isset($user) && (json_decode($user) !== null) ? json_decode($user) : null;
     @endphp
     <!-- Logout Modal-->
+    @if ( isset($user) )
     <div class="modal fade" id="userInfoModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -322,6 +323,7 @@
             </div>
         </div>
     </div>
+    @endif
 
     <div class="modal fade" id="changePass" tabindex="-1" role="dialog" aria-labelledby="changePassword"
         aria-hidden="true">
