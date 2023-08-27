@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Attribute;
 use App\Models\Category;
+use App\Models\Variant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -47,9 +48,7 @@ class ProductController extends Controller
             'description' => 'required',
             'featured_image' => 'max:2048',
             'video' => 'mimes:mp4,avi,mov|max:200000',
-            'weight' => 'numeric|min:0',
-            'unit_price' => 'required|numeric|min:0',
-            'stock' => 'required|numeric|min:0'
+            'weight' => 'numeric',
         ]; 
 
         $messages = [
@@ -65,7 +64,7 @@ class ProductController extends Controller
             'unit_price' => 'giá',
             'stock' => 'kho'
         ];
-
+                
         $validator = Validator::make($request->input(),$rules,$messages,$attributes);
         if ($validator->fails()) {
             return redirect()
@@ -73,22 +72,59 @@ class ProductController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
-        $imgPath = Storage::put('product_img',$request->file('featured_image'));
+        $imgPath = Storage::put('public',$request->file('featured_image'));
         $imgUrl = Storage::url($imgPath);
-        $videoPath = Storage::put('product_video',$request->file('video'));
-        $videoUrl = Storage::url($videoPath);
-        if(isset($data['is_variant'])){
-            $attr = Attribute::create([
-                'name'  => $data['attributeName1'],
-                'value' => $data['attributeValue1'],
-            ]);
+        $video = $request->file('video');
+        if(isset($video)){
+            $videoPath = Storage::put('public',$request->file('video'));
+            $videoUrl = Storage::url($videoPath);
         }else{
+            $videoPath = "";
+            $videoUrl = "";
+        }
+        if(isset($data['is_variant'])){
+            $attrIDs = [];
+            $variantImgs = $request->file('variant');
+            for($i = 0 ; $i < count($data['attributeName']) ; $i++){
+                Attribute::insert([
+                    'name'  => $data['attributeName'][$i],
+                    'value' => $data['attributeValue'][$i],
+                ]);
+                $attrIDs[] = DB::getPdo()->lastInsertId();
+            }
             Product::insert([
                 'category_id'    => $data['category_id'],
                 'name'           => $data['name'],
                 'description'    => $data['description'],
                 'featured_image' => $imgUrl,
                 'video'          => $videoUrl,
+                'attribute_ids'  => implode(',',$attrIDs),
+                'weight'         => $data['weight'],
+                'is_variant'     => 1
+            ]);
+            $productID = DB::getPdo()->lastInsertId();
+            foreach( $data['variant'] as $index=>$variant){
+                if(isset($variantImgs[$index])){
+                    $variantImgPath = Storage::put('public',$variantImgs[$index],'public');
+                    $variantImgUrl = Storage::url($variantImgPath);
+                }
+                $variantImgUrl = "";
+                Variant::insert([
+                    'product_id'       => $productID,
+                    'feature_image'    => $variantImgUrl,
+                    'attribute_values' => implode(',' ,$variant['name']),
+                    'unit_price'       => $variant['unit_price'],
+                    'stock'            => $variant['stock']
+                ]);
+            }
+
+        }else{
+            Product::insert([
+                'category_id'    => $data['category_id'],
+                'name'           => $data['name'],
+                'description'    => $data['description'],
+                'video'          => $videoUrl,
+                'featured_image' => $imgUrl,
                 'weight'         => $data['weight'],
                 'is_variant'     => 0,
                 'unit_price'     => $data['unit_price'],

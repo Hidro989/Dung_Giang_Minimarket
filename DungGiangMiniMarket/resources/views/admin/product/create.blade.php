@@ -34,8 +34,8 @@
             </div>
 
             <div class="form-group">
-                <select class="form-select form-control" aria-label="Default select example" name="category_id">
-                    <option selected >Chọn danh mục</option>
+                <label for="category_id">Danh mục</label>
+                <select id="category_id" class="form-select form-control" aria-label="Default select example" name="category_id">
                     @foreach ($categories as $item)
                         <option value="{{ $item->id}}">{{ $item->name}}</option>
                     @endforeach
@@ -77,7 +77,7 @@
                 <input type="checkbox" name="is_variant" id="isVariantCheckbox" onchange="toggleVariantFields()">
             </div>
 {{-- variant of product --}}
-            <div id="variantFieldsGroup" style="display: none;">
+            <div id="variantFieldsGroup" style="display: none">
                 <div class="variant-control">
                     <div id="add-classify" class="btn btn-primary mb-3">Thêm nhóm phân loại</div>
                 </div>
@@ -96,10 +96,10 @@
                 </table>
             </div>
 
-            <div id="simpleFieldsGroup" style="display: block;">
+            <div id="simpleFieldsGroup">
                 <div class="form-group">
                     <label for="unit_price">Giá: (VND)</label>
-                    <input type="number" name="unit_price" class="form-control @error('unit_price') is-invalid @enderror" value="{{ old('unit_price') }}">
+                    <input type="text" name="unit_price" class="form-control @error('unit_price') is-invalid @enderror" value="{{ old('unit_price') }}">
                     @error('unit_price')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
@@ -107,7 +107,7 @@
                 
                 <div class="form-group">
                     <label for="stock">Số lượng trong kho:</label>
-                    <input type="number" name="stock" class="form-control @error('stock') is-invalid @enderror" value="{{ old('stock')}}">
+                    <input type="number" name="stock" class="form-control @error('stock') is-invalid @enderror" value="{{ old('stock') }}" >
                     @error('stock')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
@@ -163,7 +163,8 @@
             if (isVariantCheckbox.checked) {
                 variantFieldsGroup.style.display = "block";
                 simpleFieldsGroup.style.display = "none";
-                simpleFieldsGroup.disable = true;
+                $(simpleFieldsGroup).find("input").prop("disabled",true);
+                $(variantFieldsGroup).find("input").prop("disabled",false);
                 if(classify.length == 0){
                     var variantControl = document.querySelector('.variant-control');
                     variantControl.insertAdjacentHTML('beforeend', classify1Html);
@@ -171,6 +172,8 @@
             } else {
                 variantFieldsGroup.style.display = "none";
                 simpleFieldsGroup.style.display = "block";
+                $(simpleFieldsGroup).find("input").prop("disabled",false);
+                $(variantFieldsGroup).find("input").prop("disabled",true);
             }
         }
 
@@ -180,8 +183,8 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text">Phân loại 1</span>
                     </div>
-                    <input type="text" aria-label="First name" class="form-control" name="attributeName1" placeholder="VD: Màu" oninput="generateTable()">
-                    <input type="text" aria-label="Last name" class="form-control" name="attributeValue1" placeholder="VD: đỏ,vàng,xanh" oninput="generateTable()">
+                    <input type="text" aria-label="First name" class="form-control" name="attributeName[]" placeholder="VD: Màu" oninput="generateTable()">
+                    <input type="text" aria-label="Last name" class="form-control" name="attributeValue[]" placeholder="VD: đỏ,vàng,xanh" oninput="generateTable()">
                     <div class="input-group-append" id="button-addon4">
                         <button class="btn btn-danger deleteClassify" type="button" onclick="deleteEvent()">Xóa</button>
                     </div>
@@ -190,8 +193,8 @@
                 <div class="input-group-prepend">
                       <span class="input-group-text">Phân loại 2</span>
                     </div>
-                    <input type="text" aria-label="First name" class="form-control" name="attributeName2" placeholder="VD: Kích thước" oninput="generateTable()">
-                    <input type="text" aria-label="Last name" class="form-control" name="attributeValue2" placeholder="VD: X,S,M" oninput="generateTable()">
+                    <input type="text" aria-label="First name" class="form-control" name="attributeName[]" placeholder="VD: Kích thước" oninput="generateTable()">
+                    <input type="text" aria-label="Last name" class="form-control" name="attributeValue[]" placeholder="VD: X,S,M" oninput="generateTable()">
                     <div class="input-group-append" id="button-addon4">
                         <button class="btn btn-danger deleteClassify" type="button" onclick="deleteEvent()">Xóa</button>
                     </div>
@@ -235,10 +238,10 @@
                     value1 = value1.value.split(',');
                     for( let [index,value] of value1.entries()){
                         data.push({
-                            classify1: `${value} <input type="hidden" name="variant[${index}]['name1']" value="${value}">`,
-                            feturedImage: `<input type="file" name="variant[${index}]['featured-image']" accept=".jpg,.png,.jpeg">`,
-                            price: `<input type="number" class="form-control" name="variant[${index}]['uni_price']">`,
-                            stock: `<input type="number" class="form-control" name="variant[${index}]['stock']">`
+                            classify1: `${value} <input type="hidden" name="variant[${index}][name][]" value="${value}">`,
+                            feturedImage: `<input type="file" name="variant[${index}]" accept=".jpg,.png,.jpeg">`,
+                            price: `<input type="number" class="form-control" name="variant[${index}][unit_price]">`,
+                            stock: `<input type="number" class="form-control" name="variant[${index}][stock]">`
                         })
                     }
                 }
@@ -253,11 +256,11 @@
                     for( let [i,val1] of value1.entries() ){
                         for( let [j,val2] of value2.entries() ){
                             data.push({
-                                classify1: `${val1} <input type="hidden" name="variant[${index}]['name1']" value="${val1}">`,
-                                classify2: `${val2} <input type="hidden" name="variant[${index}]['name2']" value="${val2}"`,
-                                feturedImage: `<input type="file" name="variant[${index}]['featured-image']" accept=".jpg,.png,.jpeg">`,
-                                price: `<input type="text" class="form-control" name="variant[${index}]['price']">`,
-                                stock: `<input type="text" class="form-control" name="variant[${index}]['stock']">`
+                                classify1: `${val1} <input type="hidden" name="variant[${index}][name][]" value="${val1}">`,
+                                classify2: `${val2} <input type="hidden" name="variant[${index}][name][]" value="${val2}"`,
+                                feturedImage: `<input type="file" name="variant[${index}]" accept=".jpg,.png,.jpeg">`,
+                                price: `<input type="text" class="form-control" name="variant[${index}][unit_price]">`,
+                                stock: `<input type="text" class="form-control" name="variant[${index}][stock]">`
                             })
                             index++;
                         }
