@@ -55,14 +55,14 @@ class CategoryController extends Controller
         $request->validate(
             [ 
                 'name' => 'required|max:255',
-                'image' => 'required|image|max:2048' 
+                'image' => 'required|image|max:10000' 
             ],
             [
                  'name.required' => 'Vui lòng nhập tên loại hàng',
                  'name.max' => 'Tên loại hàng không lớn hơn 255 kí tự',
                  'image.required' => 'Vui lòng chọn ảnh',
                  'image.image' => 'Vui lòng chọn ảnh',
-                 'image.max' => 'Kích thước ảnh tối đa là 2MB'
+                 'image.max' => 'Kích thước ảnh tối đa là 10MB'
 
             ],
         );

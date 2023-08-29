@@ -73,11 +73,14 @@ class UserController extends Controller
     public function home() {
         $categories = Category::all();
         $products = Product::with('variants')->get();
-        // foreach($products as $product){
-        //     foreach($product->variants as $variant){
-        //         dd($variant->attribute_values);
-        //     }
-        // }
+        foreach($products as $product){
+            if(count($product->variants) != 0 ){
+                $newPrice = formatCurrency($product->variants->min('unit_price')) ." - ". formatCurrency($product->variants->max('unit_price'));
+                $product->setAttribute('unit_price',$newPrice);
+            }else{
+                $product->setAttribute('unit_price',formatCurrency($product->unit_price));
+            }
+        }
         return view('home', compact( 'categories','products' ));
     }
 
