@@ -53,4 +53,45 @@
     e.preventDefault();
   });
 
+      /*-------------------
+		Change Password
+	--------------------- */
+  $('#btnChangePassword').on('click', function (e) {
+    e.preventDefault();
+
+    let formData = $('#changePasswordForm').serialize();
+
+    $('#changePasswordForm').find("input.form-control").each(function (index, ele) {
+        $(ele).removeClass('is-invalid');
+    });
+
+    $.ajax({
+        type: 'POST',
+        url: '/changePassword',
+        data: formData,
+        async: false,
+        success: function(response) {
+            clearInput('#changePasswordForm');
+            alert(response.success);
+        },
+        error: function(response) {
+            handleError(response);
+        }
+    });
+  });
+
+  function handleError( response ) {
+      console.log(response.responseJSON.errors);
+      $.each(response.responseJSON.errors, function(key, value) {
+          $('[name="' + key + '"]').addClass('is-invalid');
+          $('[name="' + key + '"]').next('.invalid-feedback').text(value);
+      });
+  }
+
+  function clearInput( form ) {
+      $(form).find("input.form-control").each(function (index, ele) {
+          $(ele).val('');
+      });
+  }
+
 })(jQuery); // End of use strict

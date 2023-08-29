@@ -150,4 +150,99 @@ class UserController extends Controller
 
     }
 
+    public function changePassword( Request $request ) {
+        $old_password = $request->input('old_password');
+        $user_id = $request->input('user_id');
+        $new_password = $request->input('password');
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'user_id'            => 'required',
+                'password'           => 'required|min:6|confirmed',
+                'old_password'       => 'required|min:6',
+            ],
+            [
+                'required'           => 'Vui lòng nhập trường :attribute',
+                'min'                => 'Độ dài tối thiểu của :attribute là :min kí tự',
+                'confirmed'          => 'Xác nhận mật khẩu không khớp',
+
+            ],
+            [
+                'old_password'       => 'mật khẩu cũ',
+                'password'           => 'mật khẩu',
+            ]
+        );
+
+        if( $validator->fails() ) {
+            return response()->json(
+            [
+                'errors' => $validator->errors(),
+                'old_input' => $request->all(),
+            ], 422);
+        }
+
+        $user = DB::table('users')->where('id', $user_id)->first();
+        if( $user->password !== $old_password ) {
+            return response()->json(
+                [
+                    'errors' => ['old_password' => ['Mật khẩu cũ không chính xác']],
+                    'old_input' => $request->all(),
+                ], 422);
+        }
+
+        DB::table('users')->where('id', $user_id)->update(['password' => $new_password]);
+
+        return response()->json(['success' => 'Thay đổi mật khẩu thành công']);
+    }
+
+    public function updateInformation( Request $request ) {
+        $user_id = $request->input('user_id');
+        $user = [
+            'fullname'      => $request->input('fullname'),
+            'phone'         => $request->input('phone'),
+            'date_of_birth' => $request->input('date_of_birth'),
+            'gender'        => $request->input('gender'),
+            'address'       => $request->input('address'),
+        ];
+
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'fullname'           => 'required',
+                'phone'              => 'required|numeric|digits:10',
+                'date_of_birth'      => 'required|date',
+                'gender'             => 'required',
+                'address'            => 'required',
+            ],
+            [
+                'required'           => 'Vui lòng nhập trường :attribute',
+                'min'                => 'Độ dài tối thiểu của :attribute là :min kí tự',
+                'date'               => 'Định dạng ngày tháng không hợp lệ',
+                'numeric'            => 'Định dạng số điện thoại không hợp lệ',
+                'digits'             => 'Số điện thoại phải có 10 chữ số',
+            ],
+            [
+                'fullname'           => 'họ và tên',
+                'phone'              => 'số điện thoại',
+                'date_of_birth'      => 'ngày sinh',
+                'gender'             => 'giới tính',
+                'address'            => 'địa chỉ',
+            ]
+        );
+
+        if( $validator->fails() ) {
+            return response()->json(
+                [
+                    'errors' => $validator->errors(),
+                    'old_input' => $request->all(),
+                ], 422);
+        }
+        DB::table('users')->where('id', $user_id)->update($user);
+        $this->user = DB::table('users')->where('id', $user_id)->first();
+        $cookie = cookie('user', json_encode($this->user), 1440);
+        return response()->json(['success' => 'Cập nhật thông tin thành công'])->cookie($cookie);;
+    }
+
 }
