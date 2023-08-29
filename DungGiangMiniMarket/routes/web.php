@@ -50,6 +50,7 @@ Route::get('product/{id}', [ProductController::class, 'show'])->name('product.sh
 
 
 Route::get('login', [ UserController::class, 'login' ] )->name('login')->middleware('alreadyLogin');
+Route::post('changePassword', [UserController::class, 'changePassword'])->name('changePassword');
 Route::get('logout', [ UserController::class, 'logout' ] )->name('logout');
 Route::post('handleLogin', [ UserController::class, 'handle_login' ] )->name('handleLogin');
 Route::post('handleRegister', [ UserController::class, 'handle_register' ] )->name('handleRegister');
@@ -68,5 +69,6 @@ Route::middleware('loginUser')->group( function () {
     Route::get('/', [UserController::class, 'home'])->name('/');
     Route::group ([ 'prefix' => 'user', 'as' => 'user.' ], function () {
         Route::resource('cart', CartItemController::class);
+        Route::post('updateInfo', [UserController::class, 'updateInformation'])->name('updateInfo');
     } );
 } );

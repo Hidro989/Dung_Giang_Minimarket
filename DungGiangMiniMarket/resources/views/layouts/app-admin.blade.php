@@ -2,6 +2,7 @@
     use Illuminate\Support\Facades\Cookie;
 
     $user = Cookie::get('user');
+    $user = isset($user) && (json_decode($user) !== null) ? json_decode($user) : null;
 @endphp
 <!DOCTYPE html>
 <html lang="en">
@@ -164,7 +165,7 @@
                     <form
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Tìm kiếm cho..."
                                 aria-label="Search" aria-describedby="basic-addon2">
                             <div class="input-group-append">
                                 <button class="btn btn-primary" type="button">
@@ -324,18 +325,14 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ json_decode($user)->username }}</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ $user->username }}</span>
                                 <img class="img-profile rounded-circle"
                                     src="{{ asset('assets/img/avatar.jfif') }}">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fa fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Thông tin tài khoản
-                                </a>
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#changePass">
                                     <i class="fa fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Đổi mật khẩu
                                 </a>
@@ -401,6 +398,51 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="changePass" tabindex="-1" role="dialog" aria-labelledby="changePassword"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changePassword">Đổi mật khẩu</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="needs-validation" id="changePasswordForm">
+                    @csrf
+                    <input type="hidden" name="user_id" value="{{ $user->id }}">
+                    <div class="form-group">
+                        <label for="oldPass">Mật khẩu cũ</label>
+                        <input type="password" class="form-control" id="oldPass" name="old_password" placeholder="Nhập mật khẩu cũ" value="" required>
+                        <div class="invalid-feedback">
+                            Looks good!
+                          </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPass">Mật khẩu mới</label>
+                        <input type="password" class="form-control" id="newPass" name="password" placeholder="Nhập mật khẩu mới" value="" required>
+                        <div class="invalid-feedback">
+                            Looks good!
+                          </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password-confirmation">Xác nhận mật khẩu</label>
+                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Xác thực mật khẩu" value="">
+                        <div class="invalid-feedback">
+                            Looks good!
+                          </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
+                <button class="btn btn-primary" type="button" id="btnChangePassword">Đổi mật khẩu</button>
+            </div>
+        </div>
+    </div>
+</div>
 
     <!-- Bootstrap core JavaScript-->
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>

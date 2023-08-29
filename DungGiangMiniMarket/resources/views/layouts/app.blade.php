@@ -1,6 +1,7 @@
 @php
     use Illuminate\Support\Facades\Cookie;
     $user = Cookie::get('user');
+    $user = isset($user) && (json_decode($user) !== null) ? json_decode($user) : null;
 @endphp
 <!DOCTYPE html>
 <html lang="en">
@@ -52,7 +53,7 @@
             <div class="header__cart__price">Vật phẩm: <span>$150.00</span></div>
         </div>
         <div class="humberger__menu__widget">
-            @if ( ! isset($user) || (json_decode($user) === null) )
+            @if ( $user === null )
                 <div class="header__top__right__auth">
                     <a href="{{ route('login')}}"><i class="fa fa-user"></i> Đăng nhập</a>
                     <a href="{{ route('register') }}"><i class="fa fa-user"></i> Đăng ký</a>
@@ -61,7 +62,7 @@
             <div class="header__top__right_auth">
                 <div class="dropdown">
                     <button class=" btn dropdown-toggle" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fa fa-user"> {{ json_decode($user)->username }}</i>
+                        <i class="fa fa-user"> {{ $user->username }}</i>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="userDropdown">
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#userInfoModal">
@@ -121,7 +122,7 @@
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6">
-                        @if ( ! isset($user) || (json_decode($user) === null) )
+                        @if ( $user === null )
                             <div class="header__top__right">
                                 <div class="header__top__right__social">
                                     <a href="{{ route('register') }}"><i class="fa fa-user"></i> Đăng ký</a>
@@ -134,7 +135,7 @@
                             <div class="header__top__right">
                                 <div class="dropdown">
                                     <button class=" btn dropdown-toggle" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fa fa-user"> {{ json_decode($user)->username }}</i>
+                                        <i class="fa fa-user"> {{ $user->username }}</i>
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="userDropdown">
                                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#userInfoModal">
@@ -169,7 +170,8 @@
                 <div class="col-lg-6">
                     <nav class="header__menu">
                         <ul>
-                            <li class="active"><a href="{{route('/')}}">Trang chủ</a></li>
+                            <li class="active"><a href="{{ route('/') }}">Trang chủ</a></li>
+
                             <li><a href="./shop-grid.html">Cửa hàng</a></li>
                             <li><a href="#">Trang</a>
                                 <ul class="header__menu__dropdown">
@@ -183,7 +185,7 @@
                         </ul>
                     </nav>
                 </div>
-                @if ( isset($user) && (json_decode($user) !== null) )
+                @if ( $user !== null )
                 <div class="col-lg-3">
                     <div class="header__cart">
                         <ul>
@@ -270,93 +272,115 @@
         </footer>
         <!-- Footer Section End -->
 
-    @php
-        $user = isset($user) && (json_decode($user) !== null) ? json_decode($user) : null;
-    @endphp
+
     <!-- Logout Modal-->
+
+
     @if ( isset($user) )
     <div class="modal fade" id="userInfoModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="userModalLabel">Thông tin tài khoản</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="">
-                        <div class="form-group">
-                            <label for="fullname">Tên người dùng</label>
-                            <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Nhập tên người dùng" value="{{ $user->fullname }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="userBirth">Ngày sinh</label>
-                            <input type="date" class="form-control" id="userBirth" name="date_of_birth" value="{{ $user->date_of_birth }}">
-                        </div>
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userModalLabel">Thông tin tài khoản</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="updateInfoForm" class="needs-validation">
+                    @csrf
+                    <input type="hidden" name="user_id" value="{{ $user->id }}">
+                    <div class="form-group">
+                        <label for="fullname">Tên người dùng</label>
+                        <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Nhập tên người dùng" value="{{ $user->fullname }}">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="userBirth">Ngày sinh</label>
+                        <input type="date" class="form-control" id="userBirth" name="date_of_birth" value="{{ $user->date_of_birth }}">
+                        <div class="invalid-feedback"></div>
+                    </div>
 
-                        <div class="form-group">
-                            <label for="userGender">Giới tính</label>
-                            <select id="userGender" class="wide form-control">
-                              <option value="1" {{ $user->gender == 1 ? 'selected' : '' }}>Nam</option>
-                              <option value="2" {{ $user->gender == 2 ? 'selected' : '' }}>Nữ</option>
-                              <option value="3" {{ $user->gender == 3 ? 'selected' : '' }}>Khác</option>
-                            </select>
-                        </div>
+                    <div class="form-group">
+                        <label for="userGender">Giới tính</label>
+                        <select id="userGender" class="form-control noNice" name="gender">
+                          <option value="1" {{ $user->gender == 1 ? 'selected' : '' }}>Nam</option>
+                          <option value="2" {{ $user->gender == 2 ? 'selected' : '' }}>Nữ</option>
+                          <option value="3" {{ $user->gender == 3 ? 'selected' : '' }}>Khác</option>
+                        </select>
+                        <div class="invalid-feedback"></div>
+                    </div>
 
-                        <div class="form-group">
-                            <label for="userAddress">Địa chỉ</label>
-                            <input type="text" class="form-control" id="userAddress" name="address" placeholder="Nhập địa chỉ" value="{{ $user->address }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="userPhone">Số điện thoại</label>
-                            <input type="text" class="form-control" id="userPhone" name="phone" placeholder="Nhập số điện thoại" value="{{ $user->phone }}">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
-                    <a class="btn btn-primary" href="{{ route('logout') }}">Sửa</a>
-                </div>
+                    <div class="form-group">
+                        <label for="userAddress">Địa chỉ</label>
+                        <input type="text" class="form-control" id="userAddress" name="address" placeholder="Nhập địa chỉ" value="{{ $user->address }}">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="userPhone">Số điện thoại</label>
+                        <input type="text" class="form-control" id="userPhone" name="phone" placeholder="Nhập số điện thoại" value="{{ $user->phone }}">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
+                <button class="btn btn-primary" type="button" id="btnUpdateInfo">Sửa</button>
             </div>
         </div>
     </div>
+
     @endif
 
-    <div class="modal fade" id="changePass" tabindex="-1" role="dialog" aria-labelledby="changePassword"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="changePassword">Đổi mật khẩu</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="">
-                        <div class="form-group">
-                            <label for="oldPass">Mật khẩu cũ</label>
-                            <input type="text" class="form-control" id="oldPass" name="oldpass" placeholder="Nhập mật khẩu cũ" value="">
-                        </div>
-                        <div class="form-group">
-                            <label for="newPass">Địa chỉ</label>
-                            <input type="text" class="form-control" id="newPass" name="password" placeholder="Nhập mật khẩu mới" value="">
-                        </div>
-                        <div class="form-group">
-                            <label for="password-confirmation">Số điện thoại</label>
-                            <input type="text" class="form-control" id="password-confirmation" name="password-confirmation" placeholder="Xác thực mật khẩu" value="">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
-                    <a class="btn btn-primary" href="{{ route('logout') }}">Đổi mật khẩu</a>
-                </div>
+<div class="modal fade" id="changePass" tabindex="-1" role="dialog" aria-labelledby="changePassword"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changePassword">Đổi mật khẩu</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="needs-validation" id="changePasswordForm">
+                    @csrf
+                    <input type="hidden" name="user_id" value="{{ $user->id }}">
+                    <div class="form-group">
+                        <label for="oldPass">Mật khẩu cũ</label>
+                        <input type="password" class="form-control" id="oldPass" name="old_password" placeholder="Nhập mật khẩu cũ" value="" required>
+                        <div class="invalid-feedback">
+                            Looks good!
+                          </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPass">Mật khẩu mới</label>
+                        <input type="password" class="form-control" id="newPass" name="password" placeholder="Nhập mật khẩu mới" value="" required>
+                        <div class="invalid-feedback">
+                            Looks good!
+                          </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password-confirmation">Xác nhận mật khẩu</label>
+                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Xác thực mật khẩu" value="">
+                        <div class="invalid-feedback">
+                            Looks good!
+                          </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
+                <button class="btn btn-primary" type="button" id="btnChangePassword">Đổi mật khẩu</button>
             </div>
         </div>
     </div>
+</div>
+
+    @endif
+    
+
 
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
