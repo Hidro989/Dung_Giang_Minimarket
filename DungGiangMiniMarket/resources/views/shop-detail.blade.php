@@ -112,7 +112,7 @@
                                 <a href="#" class="primary-btn">Thêm vào giỏ hàng</a>
                                 <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
                                 <ul>
-                                    <li><b>Kho</b> <span>{{ $product->stock}}</span></li>
+                                    <li><b >Kho</b> <span class="total_stock">{{ $product->stock}}</span></li>
                                     <li><b>Cân nặng</b> <span>{{$product->weight}}</span> kg</li>
                                     <li><b>Chia sẻ</b>
                                         <div class="share">
@@ -187,6 +187,7 @@
                                         }else{
                                             $('.product__details__price').text(defaultPrice)
                                             $('.product__details__pic__item--large').attr('src',defaultImg)
+                                            $('.total_stock').text('')
                                         }
                                     }
                                     function getVariant(id){
@@ -199,6 +200,7 @@
                                             success: function ( data ){
                                                 $('.product__details__pic__item--large').attr('src',data.feature_image)
                                                 $('.product__details__price').text(data.unit_price)
+                                                $('.total_stock').text(data.stock)
                                                 }
                                             }
                                         )
@@ -214,7 +216,7 @@
                         <a href="#" class="primary-btn">Thêm vào giỏ hàng</a>
                         <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
                         <ul>
-                            <li><b>Kho :</b> <span>{{ $product->stock}}</span></li>
+                            <li><b>Kho :</b> <span class="total_stock">{{ $product->stock}}</span></li>
                             <li><b>Cân nặng :</b> <span>{{$product->weight}}</span> kg</li>
                             <li><b>Chia sẻ :</b>
                                 <div class="share">
@@ -319,70 +321,30 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="section-title related__product__title">
-                            <h2>Related Product</h2>
+                            <h2>Các sản phẩm liên quan</h2>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-3 col-md-4 col-sm-6">
-                        <div class="product__item">
-                            <div class="product__item__pic set-bg" data-setbg="img/product/product-1.jpg">
-                                <ul class="product__item__pic__hover">
-                                    <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                                </ul>
+                    @if( !empty($relatedProducts))
+                        @foreach( $relatedProducts as $item)
+                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                <div class="product__item">
+                                    <div class="product__item__pic set-bg" data-setbg="{{ $item->featured_image}}">
+                                        <ul class="product__item__pic__hover">
+                                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="product__item__text">
+                                        <h6><a href="{{route('product.show',$item->id)}}">{{ $item->name}}</a></h6>
+                                        <h5>{{ $item->unit_price }}</h5>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="product__item__text">
-                                <h6><a href="#">Crab Pool Security</a></h6>
-                                <h5>$30.00</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-sm-6">
-                        <div class="product__item">
-                            <div class="product__item__pic set-bg" data-setbg="img/product/product-2.jpg">
-                                <ul class="product__item__pic__hover">
-                                    <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                                </ul>
-                            </div>
-                            <div class="product__item__text">
-                                <h6><a href="#">Crab Pool Security</a></h6>
-                                <h5>$30.00</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-sm-6">
-                        <div class="product__item">
-                            <div class="product__item__pic set-bg" data-setbg="img/product/product-3.jpg">
-                                <ul class="product__item__pic__hover">
-                                    <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                                </ul>
-                            </div>
-                            <div class="product__item__text">
-                                <h6><a href="#">Crab Pool Security</a></h6>
-                                <h5>$30.00</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-sm-6">
-                        <div class="product__item">
-                            <div class="product__item__pic set-bg" data-setbg="img/product/product-7.jpg">
-                                <ul class="product__item__pic__hover">
-                                    <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                                </ul>
-                            </div>
-                            <div class="product__item__text">
-                                <h6><a href="#">Crab Pool Security</a></h6>
-                                <h5>$30.00</h5>
-                            </div>
-                        </div>
+                        @endforeach
+                    @endif
                     </div>
                 </div>
             </div>
