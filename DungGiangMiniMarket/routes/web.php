@@ -5,6 +5,7 @@ use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -42,6 +43,9 @@ Route::get('/shop-detail', function () {
 Route::get('/shop-grid', function () {
     return view('shop-grid');
 });
+
+Route::get('product/find',[ProductController::class,'find']);
+Route::get('product/{id}', [ProductController::class, 'show'])->name('product.show');
 
 
 

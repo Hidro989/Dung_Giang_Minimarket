@@ -74,18 +74,24 @@
 
             <div class="form-group d-flex align-items-center ">
                 <label for="is_variant" class="mr-2">Phân loại:</label>
+                @if(old('is_variant') == null)
                 <input type="checkbox" name="is_variant" id="isVariantCheckbox" onchange="toggleVariantFields()">
+                @else
+                <input type="checkbox" name="is_variant" id="isVariantCheckbox" onchange="toggleVariantFields()" checked>
+                @endif
             </div>
 {{-- variant of product --}}
             <div id="variantFieldsGroup" style="display: none">
                 <div class="variant-control">
                     <div id="add-classify" class="btn btn-primary mb-3">Thêm nhóm phân loại</div>
+                    
                 </div>
+
                 <div id="variant-list" class="form-group mt-3">
                     <label for="" class="mr-5">Danh sách phân loại:</label>
                     <div class="input-group bulk-apply">
-                        <input type="number" aria-label="First name" class="form-control" placeholder="Giá sản phẩm">
-                        <input type="number" aria-label="Last name" class="form-control" placeholder="Số lượng kho">
+                        <input type="number" aria-label="First name" class="form-control" placeholder="Giá sản phẩm" name="bulk-price" value="{{old('bulk-price')}}">
+                        <input type="number" aria-label="Last name" class="form-control" placeholder="Số lượng kho" name="bulk-stock" value="{{old('bulk-stock')}}">
                         <div class="input-group-append" id="button-addon4">
                             <button id="bulk-apply-btn" class="btn btn-primary" type="button">Áp dụng cho tất cả</button>
                         </div>
@@ -124,6 +130,9 @@
 @push('scripts')
     <script src="{{ asset('assets/js/bootstrap-table.min.js') }}"></script>
     <script>
+        $(document).ready(function(){
+            toggleVariantFields();
+        })
         function previewFeaturedImage(event) {
             var input = event.target;
             var previewImage = document.getElementById("featuredImagePreview");
@@ -240,8 +249,8 @@
                         data.push({
                             classify1: `${value} <input type="hidden" name="variant[${index}][name][]" value="${value}">`,
                             feturedImage: `<input type="file" name="variant[${index}]" accept=".jpg,.png,.jpeg">`,
-                            price: `<input type="number" class="form-control" name="variant[${index}][unit_price]">`,
-                            stock: `<input type="number" class="form-control" name="variant[${index}][stock]">`
+                            price: `<input type="number" class="form-control variant-price" name="variant[${index}][unit_price]">`,
+                            stock: `<input type="number" class="form-control variant-stock" name="variant[${index}][stock]">`
                         })
                     }
                 }
@@ -259,8 +268,8 @@
                                 classify1: `${val1} <input type="hidden" name="variant[${index}][name][]" value="${val1}">`,
                                 classify2: `${val2} <input type="hidden" name="variant[${index}][name][]" value="${val2}"`,
                                 feturedImage: `<input type="file" name="variant[${index}]" accept=".jpg,.png,.jpeg">`,
-                                price: `<input type="text" class="form-control" name="variant[${index}][unit_price]">`,
-                                stock: `<input type="text" class="form-control" name="variant[${index}][stock]">`
+                                price: `<input type="text" class="form-control variant-price" name="variant[${index}][unit_price]">`,
+                                stock: `<input type="text" class="form-control variant-stock" name="variant[${index}][stock]">`
                             })
                             index++;
                         }
@@ -275,8 +284,16 @@
                         return ''; 
                     }
                 })
-            }
-            
+            }            
         }
+        $('#bulk-apply-btn').on('click',function(){
+            const [price,stock] = $('.bulk-apply .form-control');
+            if(price.value.trim() != ""){
+                $('.variant-price').val(price.value);
+            }
+            if(stock.value.trim() != ""){
+                $('.variant-stock').val(stock.value);
+            }
+        })
         </script>
 @endpush

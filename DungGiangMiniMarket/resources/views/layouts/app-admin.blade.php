@@ -88,7 +88,7 @@
                 </a>
                 <div id="collapseProduct" class="collapse {{ isset($product) ? 'show' : ''}}" aria-labelledby="headingProduct" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item {{ isset($index) ? $index : ''}}" href="{{ route('admin.product.index')}}">Tất cả hàng</a>
+                        <a class="collapse-item {{ isset($index) ? $index : ''}}" href="{{ route('admin.product.index')}}">Danh sách sản phẩm</a>
                         <a class="collapse-item {{ isset($create) ? $create : ''}}" href="{{ route('admin.product.create')}}">Thêm sản phẩm</a>
                     </div>
                 </div>

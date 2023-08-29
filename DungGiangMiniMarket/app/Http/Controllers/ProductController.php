@@ -20,7 +20,16 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return view('admin.product.index');
+        $products = Product::with('variants')->with('category')->get();
+        foreach($products as $product){
+            if(count($product->variants) != 0 ){
+                $newPrice = formatCurrency($product->variants->min('unit_price')) ." - ". formatCurrency($product->variants->max('unit_price'));
+                $product->setAttribute('unit_price',$newPrice);
+            }else{
+                $product->setAttribute('unit_price',formatCurrency($product->unit_price));
+            }
+        }
+        return view('admin.product.index',compact('products'));
     }
 
     /**
@@ -40,6 +49,27 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function find(Request $request){
+       $productId = $request->input('id');
+       $attribute1 = $request->has('attribute0') ? $request->input('attribute0') : null;
+       $attribute2 = $request->has('attribute0') ? $request->input('attribute1') : null;
+       $data = null;
+       if($attribute1 != null && $attribute2 == null){
+            $data = Variant::where([
+                'product_id' => $productId,
+                'attribute_values' => $attribute1
+            ])->get()->first();
+       }else if ($attribute1 != null && $attribute2 != null ){
+            $data = Variant::where('product_id',$productId)->where(function ($query) use ($attribute1,$attribute2){
+                $query->where('attribute_values', 'LIKE', '%' . $attribute1 . ',' . $attribute2 . '%')
+                ->orWhere('attribute_values', 'LIKE', '%' . $attribute2 . ',' . $attribute1 . '%');
+            })->get()->first();
+       }else{
+            $data = Product::find($productId);
+       }
+       $data->setAttribute('unit_price',formatCurrency($data->unit_price));
+       return response()->json($data);
+    }
     public function store(Request $request)
     {
         $data = $request->input();
@@ -54,15 +84,15 @@ class ProductController extends Controller
         $messages = [
             'required' => 'Không được bỏ trống :attribute',
             'numeric'  => 'Giá trị phải là số',
-            'min' => 'Giá trị phải là số nguyên dương'
+            'min'      => 'Giá trị phải là số nguyên dương'
         ];
 
         $attributes = [
-            'name' => 'tên sản phẩm',
-            'description' => 'mô tả',
+            'name'           => 'tên sản phẩm',
+            'description'    => 'mô tả',
             'featured_image' => 'hỉnh ảnh',
-            'unit_price' => 'giá',
-            'stock' => 'kho'
+            'unit_price'     => 'giá',
+            'stock'          => 'kho'
         ];
                 
         $validator = Validator::make($request->input(),$rules,$messages,$attributes);
@@ -104,11 +134,11 @@ class ProductController extends Controller
             ]);
             $productID = DB::getPdo()->lastInsertId();
             foreach( $data['variant'] as $index=>$variant){
+                $variantImgUrl = "";
                 if(isset($variantImgs[$index])){
                     $variantImgPath = Storage::put('public',$variantImgs[$index],'public');
                     $variantImgUrl = Storage::url($variantImgPath);
                 }
-                $variantImgUrl = "";
                 Variant::insert([
                     'product_id'       => $productID,
                     'feature_image'    => $variantImgUrl,
@@ -141,9 +171,25 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show($id)
     {
-        //
+        $product = Product::with('variants')->find($id);
+        if (!$product) {
+            abort(404);
+        }
+        $attrIds = explode(',',$product->attribute_ids);
+        $attributes = Attribute::whereIn('id',$attrIds)->get();
+        foreach($attributes as $attribute){
+            $attribute->setAttribute('value',explode(',',$attribute->value));
+
+        }
+        if(count($product->variants) != 0 ){
+            $newPrice = formatCurrency($product->variants->min('unit_price')) ." - ". formatCurrency($product->variants->max('unit_price'));
+            $product->setAttribute('unit_price',$newPrice);
+        }else{
+            $product->setAttribute('unit_price',formatCurrency($product->unit_price));
+        }
+        return view('shop-detail', compact('product', 'attributes'));
     }
 
     /**
@@ -152,9 +198,14 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function edit(Product $product)
+    public function edit($id)
     {
-        //
+        $categories = Category::all();
+        $productEdit = Product::with('variants')->with('category')->find($id);
+        $attrIds =  explode(',',$productEdit->attribute_ids);
+        $attributes = Attribute::whereIn('id',$attrIds)->get();
+        $productEdit->setAttribute('attributes',$attributes);
+        return view('admin.product.edit', compact('categories','productEdit'));
     }
 
     /**

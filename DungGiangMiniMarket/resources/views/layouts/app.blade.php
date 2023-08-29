@@ -1,6 +1,5 @@
 @php
     use Illuminate\Support\Facades\Cookie;
-
     $user = Cookie::get('user');
 @endphp
 <!DOCTYPE html>
@@ -44,7 +43,7 @@
     <div class="humberger__menu__overlay"></div>
     <div class="humberger__menu__wrapper">
         <div class="humberger__menu__logo">
-            <a href="#"><img src="{{ asset('assets/img/logo.png') }}" alt=""></a>
+            <a href="{{ route('/' )}}"><img src="{{ asset('assets/img/logo.png') }}" alt=""></a>
         </div>
         <div class="humberger__menu__cart">
             <ul>
@@ -164,13 +163,13 @@
             <div class="row">
                 <div class="col-lg-3">
                     <div class="header__logo">
-                        <a href="./index.html"><img src="{{ asset('assets/img/logo.png')}}" alt=""></a>
+                        <a href="{{route('/')}}"><img src="{{ asset('assets/img/logo.png')}}" alt=""></a>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <nav class="header__menu">
                         <ul>
-                            <li class="active"><a href="./index.html">Trang chủ</a></li>
+                            <li class="active"><a href="{{route('/')}}">Trang chủ</a></li>
                             <li><a href="./shop-grid.html">Cửa hàng</a></li>
                             <li><a href="#">Trang</a>
                                 <ul class="header__menu__dropdown">
