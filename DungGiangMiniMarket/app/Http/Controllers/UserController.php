@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -71,7 +72,13 @@ class UserController extends Controller
 
     public function home() {
         $categories = Category::all();
-        return view('home', compact( 'categories' ));
+        $products = Product::with('variants')->get();
+        // foreach($products as $product){
+        //     foreach($product->variants as $variant){
+        //         dd($variant->attribute_values);
+        //     }
+        // }
+        return view('home', compact( 'categories','products' ));
     }
 
 
