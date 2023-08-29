@@ -2,7 +2,8 @@
 @section('title', 'Cửa hàng')
 @section('content')
         <!-- Hero Section Begin -->
-        <section class="hero hero-normal">
+        @include('includes.hero')
+        {{-- <section class="hero hero-normal">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-3">
@@ -51,7 +52,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> --}}
         <!-- Hero Section End -->
     
         <!-- Breadcrumb Section Begin -->
@@ -183,7 +184,7 @@
                                         <div class="latest-prdouct__slider__item">
                                             <a href="#" class="latest-product__item">
                                                 <div class="latest-product__item__pic">
-                                                    <img src="img/latest-product/lp-1.jpg" alt="">
+                                                    <img src="{{ asset('assets/img/latest-product/lp1.jpg')}}" alt="">
                                                 </div>
                                                 <div class="latest-product__item__text">
                                                     <h6>Crab Pool Security</h6>
@@ -253,7 +254,7 @@
                                     <div class="col-lg-4">
                                         <div class="product__discount__item">
                                             <div class="product__discount__item__pic set-bg"
-                                                data-setbg="img/product/discount/pd-1.jpg">
+                                                data-setbg="{{ asset('assets/img/product/discount/pd-1.jpg')}}">
                                                 <div class="product__discount__percent">-20%</div>
                                                 <ul class="product__item__pic__hover">
                                                     <li><a href="#"><i class="fa fa-heart"></i></a></li>
