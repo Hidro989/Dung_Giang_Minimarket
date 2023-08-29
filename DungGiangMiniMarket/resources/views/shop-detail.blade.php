@@ -3,7 +3,9 @@
 @section('content')
     <!-- Hero Section Begin -->
 
-    <section class="hero hero-normal">
+    @include('includes.hero')
+    {{-- <section class="hero hero-normal">
+
         <div class="container">
             <div class="row">
                 <div class="col-lg-3">
@@ -52,11 +54,11 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
     <!-- Hero Section End -->
     
         <!-- Breadcrumb Section Begin -->
-        <section class="breadcrumb-section set-bg" data-setbg="img/breadcrumb.jpg">
+        <section class="breadcrumb-section set-bg" data-setbg="{{ asset('assets/img/breadcrumb.jpg') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12 text-center">
@@ -77,6 +79,7 @@
         <!-- Product Details Section Begin -->
         <section class="product-details spad">
             <div class="container">
+
                     <div class="row">
                         @if( count($product->variants) === 0)
                         {{-- Simple products --}}
@@ -123,6 +126,7 @@
                                         </div>
                                     </li>
                                 </ul>
+
                             </div>
                         </div>
                 {{-- Variants products --}}

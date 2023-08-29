@@ -19,7 +19,7 @@ class AlreadyLogin
     {
         $user = $request->cookie('user');
         if( ! empty($user) ) {
-            return redirect()->route('user.home');
+            return redirect()->route('/');
         }
         return $next($request);
     }
