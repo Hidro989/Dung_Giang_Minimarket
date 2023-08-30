@@ -1,7 +1,9 @@
 @php
     use Illuminate\Support\Facades\Cookie;
+    use Illuminate\Support\Facades\DB;
     $user = Cookie::get('user');
     $user = isset($user) && (json_decode($user) !== null) ? json_decode($user) : null;
+    $number_cart_item = DB::table('cart_items')->where('user_id', $user->id)->count();
 @endphp
 <!DOCTYPE html>
 <html lang="en">
@@ -48,7 +50,7 @@
         </div>
         <div class="humberger__menu__cart">
             <ul>
-                <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>{{$number_cart_item}}</span></a></li>
             </ul>
             <div class="header__cart__price">Vật phẩm: <span>$150.00</span></div>
         </div>
@@ -173,15 +175,7 @@
                             <li class="active"><a href="{{ route('/') }}">Trang chủ</a></li>
 
                             <li><a href="./shop-grid.html">Cửa hàng</a></li>
-                            <li><a href="#">Trang</a>
-                                <ul class="header__menu__dropdown">
-                                    <li><a href="./shop-details.html">Shop Details</a></li>
-                                    <li><a href="{{ route('user.cart.index') }}">Shoping Cart</a></li>
-                                    <li><a href="./checkout.html">Check Out</a></li>
-                                    <li><a href="./blog-details.html">Blog Details</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="./contact.html">Liên hệ</a></li>
+                            <li><a href="{{url('/contact')}}">Liên hệ</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -189,9 +183,9 @@
                 <div class="col-lg-3">
                     <div class="header__cart">
                         <ul>
-                            <li><a href="{{ route('user.cart.index') }}"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                            <li><a href="{{ route('user.cart.index') }}"><i class="fa fa-shopping-bag"></i> <span>{{$number_cart_item}}</span></a></li>
                         </ul>
-                        <div class="header__cart__price">Vật phẩm: <span>200k</span></div>
+                        {{-- <div class="header__cart__price">Vật phẩm: <span>200k</span></div> --}}
                     </div>
                 </div>
                 @endif
@@ -211,7 +205,7 @@
                     <div class="col-lg-3 col-md-6 col-sm-6">
                         <div class="footer__about">
                             <div class="footer__about__logo">
-                                <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                                <a href="{{route('/')}}"><img src="{{asset('assets/img/logo.png')}}" alt=""></a>
                             </div>
                             <ul>
                                 <li>Địa chỉ: Đại Từ, Thái Nguyên</li>
@@ -331,7 +325,6 @@
         </div>
     </div>
 
-    @endif
 
 <div class="modal fade" id="changePass" tabindex="-1" role="dialog" aria-labelledby="changePassword"
     aria-hidden="true">

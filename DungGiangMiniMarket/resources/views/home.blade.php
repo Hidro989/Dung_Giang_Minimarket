@@ -1,6 +1,12 @@
 @extends('layouts.app')
 @section('title', 'Trang chủ')
 @section('content')
+@php
+    use Illuminate\Support\Facades\Cookie;
+    $user = Cookie::get('user');
+    $user = isset($user) && (json_decode($user) !== null) ? json_decode($user) : null;
+   
+@endphp
         <!-- Hero Section Begin -->
     <section class="hero">
         <div class="container">
@@ -140,10 +146,10 @@
                     <div class="col-lg-3 col-md-4 col-sm-6 mix {{ 'category'.$product->category_id }} fresh-meat">
                         <div class="featured__item">
                             <div class="featured__item__pic set-bg" data-setbg="{{ url($product->featured_image) }}">
-                                <ul class="featured__item__pic__hover">
-                                    <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                <ul class="featured__item__pic__hover" >
                                     <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                    {{-- <li><a href="{{ route('user.cart.add', ['product_id' => $product->id]) }}"><i class="fa fa-shopping-cart"></i></a></li> --}}
+                                    <li><a href="#" class="btnAddToCart" data-product-id="{{$product->id}}" data-user-id="{{isset($user) ? $user->id : -1}}"><i class="fa fa-shopping-cart"></i></a></li>
                                 </ul>
                             </div>
                             <div class="featured__item__text">

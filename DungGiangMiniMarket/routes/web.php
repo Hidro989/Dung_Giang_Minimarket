@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
@@ -36,9 +36,6 @@ Route::get('/contact', function () {
     return view('contact');
 });
 
-Route::get('/shop-detail', function () {
-    return view('shop-detail');
-});
 
 Route::get('/shop-grid', function () {
     return view('shop-grid');
@@ -46,7 +43,6 @@ Route::get('/shop-grid', function () {
 
 Route::get('product/find',[ProductController::class,'find']);
 Route::get('product/{id}', [ProductController::class, 'show'])->name('product.show');
-
 
 
 Route::get('login', [ UserController::class, 'login' ] )->name('login')->middleware('alreadyLogin');
@@ -68,7 +64,10 @@ Route::middleware('loginAdmin')->group( function () {
 Route::middleware('loginUser')->group( function () {
     Route::get('/', [UserController::class, 'home'])->name('/');
     Route::group ([ 'prefix' => 'user', 'as' => 'user.' ], function () {
-        Route::resource('cart', CartItemController::class);
+        Route::get('cart/index', [CartController::class, 'index'])->name('cart.index');
+        Route::get('cart/add', [CartController::class, 'add'])->name('cart.add');
+        Route::get('cart/update', [CartController::class, 'update'])->name('cart.update');
+        Route::get('cart/destroy', [CartController::class, 'destroy'])->name('cart.destroy');
         Route::post('updateInfo', [UserController::class, 'updateInformation'])->name('updateInfo');
     } );
 } );
