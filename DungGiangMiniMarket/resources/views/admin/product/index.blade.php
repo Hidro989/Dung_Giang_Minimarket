@@ -10,6 +10,14 @@
 
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Quản lý mặt hàng</h1>
+    @if (session('success'))
+        <div class="alert alert-success" role="alert">
+            {{ session('success') }}
+            <button type=" button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
@@ -44,7 +52,7 @@
                                 <form action="{{ route('admin.product.destroy', $product->id) }}" method="post">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-danger btn-circle"><i class="fa fa-trash-o"></i></button>
+                                    <div class="btn btn-danger btn-circle" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-trash-o"></i></div>
                                 </form>
                             </td>
                             </tr>
@@ -54,6 +62,26 @@
             </div>
         </div>
     </div>
+    {{-- modal --}}
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Xóa sản phẩm</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              Bạn có chắc chắn muốn xóa sản phẩm ?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+              <button type="button" class="btn btn-danger" id="confirmBtn">Đồng ý</button>
+            </div>
+          </div>
+        </div>
+      </div>
 @endsection
 @push('scripts')
     <!-- Page level plugins -->
@@ -62,9 +90,18 @@
 
     <!-- Page level custom scripts -->
     <script>
+        var activeBtn;
         $(document).ready(function() {
             $('#dataTable').DataTable();
         });
+        $('#exampleModalCenter').on('show.bs.modal',function (e){
+            activeBtn = $(e.relatedTarget);
+        });
+        $('#confirmBtn').on('click',function(){
+            activeBtn.parent().submit();
+            $('#exampleModalCenter').modal('hide');
+        })
+
     </script>
 
 @endpush

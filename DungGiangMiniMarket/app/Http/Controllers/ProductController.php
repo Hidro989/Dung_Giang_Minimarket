@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Attribute;
 use App\Models\Category;
+use App\Models\Review;
 use App\Models\Variant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -79,7 +80,7 @@ class ProductController extends Controller
         $rules = [
             'name' => 'required',
             'description' => 'required',
-            'featured_image' => 'max:2048',
+            'featured_image' => 'required',
             'video' => 'mimes:mp4,avi,mov|max:200000',
             'weight' => 'numeric',
         ]; 
@@ -98,7 +99,7 @@ class ProductController extends Controller
             'stock'          => 'kho'
         ];
                 
-        $validator = Validator::make($request->input(),$rules,$messages,$attributes);
+        $validator = Validator::make($request->all(),$rules,$messages,$attributes);
         if ($validator->fails()) {
             return redirect()
                 ->back()
@@ -180,6 +181,7 @@ class ProductController extends Controller
         if (!$product) {
             abort(404);
         }
+        $reviews = Review::where('product_id',$id)->with('user',)->get();
         $relatedProducts = Product::whereNotIn('id',[$product->id])->where('category_id',$product->category->id)->get();
         $this->formatProducts($relatedProducts);
         $attrIds = explode(',',$product->attribute_ids);
@@ -194,7 +196,7 @@ class ProductController extends Controller
         }else{
             $product->setAttribute('unit_price',formatCurrency($product->unit_price));
         }
-        return view('shop-detail', compact('product', 'attributes','relatedProducts'));
+        return view('shop-detail', compact('product', 'attributes','relatedProducts','reviews'));
     }
 
     /**
@@ -222,7 +224,38 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $data = $request->input();
+        dd($product->attribute_ids);
+        $rules = [
+            'name' => 'required',
+            'description' => 'required',
+            'featured_image' => 'max:2048',
+            'video' => 'mimes:mp4,avi,mov|max:200000',
+            'weight' => 'numeric',
+        ]; 
+
+        $messages = [
+            'required' => 'Không được bỏ trống :attribute',
+            'numeric'  => 'Giá trị phải là số',
+            'min'      => 'Giá trị phải là số nguyên dương'
+        ];
+
+        $attributes = [
+            'name'           => 'tên sản phẩm',
+            'description'    => 'mô tả',
+            'featured_image' => 'hỉnh ảnh',
+            'unit_price'     => 'giá',
+            'stock'          => 'kho'
+        ];
+                
+        $validator = Validator::make($request->input(),$rules,$messages,$attributes);
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
     }
 
     /**
@@ -233,6 +266,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        Product::destroy($product->id);
+        return redirect()->route('admin.product.index')->with('success','Xóa sản phẩm thành công');
     }
 }

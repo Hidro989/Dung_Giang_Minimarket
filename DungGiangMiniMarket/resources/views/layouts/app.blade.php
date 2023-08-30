@@ -86,7 +86,7 @@
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
                 <li class="active"><a href="./index.html">Trang chủ</a></li>
-                <li><a href="./shop-grid.html">Cửa hàng</a></li>
+                <li><a href="/shop-grid">Cửa hàng</a></li>
                 <li><a href="#">Trang</a>
                     <ul class="header__menu__dropdown">
                         <li><a href="./shop-details.html">Shop Details</a></li>
@@ -172,7 +172,7 @@
                         <ul>
                             <li class="active"><a href="{{ route('/') }}">Trang chủ</a></li>
 
-                            <li><a href="./shop-grid.html">Cửa hàng</a></li>
+                            <li><a href="/shop-grid">Cửa hàng</a></li>
                             <li><a href="#">Trang</a>
                                 <ul class="header__menu__dropdown">
                                     <li><a href="./shop-details.html">Shop Details</a></li>
@@ -330,9 +330,6 @@
             </div>
         </div>
     </div>
-
-    @endif
-
 <div class="modal fade" id="changePass" tabindex="-1" role="dialog" aria-labelledby="changePassword"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -377,11 +374,7 @@
         </div>
     </div>
 </div>
-
     @endif
-    
-
-
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/js/jquery.nice-select.min.js') }}"></script>
