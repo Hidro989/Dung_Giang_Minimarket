@@ -6,6 +6,12 @@
     $user = isset($user) && (json_decode($user) !== null) ? json_decode($user) : null;
 @endphp
 @section('content')
+
+    <!-- Hero Section Begin -->
+    @include('includes.hero')
+    <!-- Hero Section End -->
+    
+
     <style>
     body {
         padding-top: 70px;
@@ -56,6 +62,7 @@
         color:green;
     }
     </style>
+
         <!-- Breadcrumb Section Begin -->
         <section class="breadcrumb-section set-bg" data-setbg="{{ asset('assets/img/breadcrumb.jpg') }}">
             <div class="container">
@@ -64,7 +71,7 @@
                         <div class="breadcrumb__text">
                             <h2>Vegetable’s Package</h2>
                             <div class="breadcrumb__option">
-                                <a href="./index.html">Home</a>
+                                <a href="{{ route('/') }}">Trang chủ</a>
                                 <a href="./index.html">Vegetables</a>
                                 <span>Vegetable’s Package</span>
                             </div>
@@ -104,15 +111,15 @@
                                 </div>
                                 <div class="product__details__price price_main"> {{ $product->unit_price }}</div>
                                 <p>{{ $product->description}}</p>
+
                                 <div class="product__details__quantity">
                                     <div class="quantity">
                                         <div class="pro-qty">
-                                            <input type="text" value="1">
+                                            <input type="text" value="1" >
                                         </div>
                                     </div>
                                 </div>
-                                <a href="#" class="primary-btn">Thêm vào giỏ hàng</a>
-                                <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
+                                <a href="#" class="primary-btn" id="hui_add_to_cart" data-product-id="{{$product->id}}" data-user-id="{{$user->id}}">Thêm vào giỏ hàng</a>
                                 <ul>
                                     <li><b >Kho</b> <span class="total_stock">{{ $product->stock}}</span></li>
                                     <li><b>Cân nặng</b> <span>{{$product->weight}}</span> kg</li>
@@ -238,21 +245,23 @@
                                 <ul class="nav nav-tabs" role="tablist">
                                     <li class="nav-item">
                                         <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
-                                            aria-selected="true">Description</a>
+                                            aria-selected="true">Mô tả</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab"
-                                            aria-selected="false">Information</a>
+                                            aria-selected="false">Thông tin</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab"
+
                                             aria-selected="false">Reviews <span>( {{ !empty($product->reviews) ? count($product->reviews) : '0'}} )</span></a>
+
                                     </li>
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="tabs-1" role="tabpanel">
                                         <div class="product__details__tab__desc">
-                                            <h6>Products Infomation</h6>
+                                            <h6>Thông tin sản phẩm</h6>
                                             <p>Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.
                                                 Pellentesque in ipsum id orci porta dapibus. Proin eget tortor risus. Vivamus
                                                 suscipit tortor eget felis porttitor volutpat. Vestibulum ac diam sit amet quam
@@ -544,7 +553,10 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="section-title related__product__title">
+
+
                             <h2>Các sản phẩm liên quan</h2>
+
                         </div>
                     </div>
                 </div>
@@ -574,3 +586,63 @@
         </section>
         <!-- Related Product Section End -->
 @endsection
+
+@push('scripts')
+    <script>
+        'use strict';
+        (function ($) {
+
+            $('.pro-qty').each(function (index, ele) {
+                let numberQuantity = $(ele).find('input');
+                let unitPirce = $(ele).closest('.shoping__cart__quantity').prev('.shoping__cart__price');
+                let cartTotal = $(ele).closest('.shoping__cart__quantity').next('.shoping__cart__total');
+
+                // de cart
+                $(ele).find('.dec').on('click', function(){
+                    let oldValue = $(numberQuantity).val();
+                    let newVal = 0;
+                    if(oldValue > 0) {
+                        newVal = parseInt(oldValue) - 1;
+                    }
+                    $(numberQuantity).val(newVal);
+                });
+
+                // decrement cart
+                $(ele).find('.inc').on('click', function(){
+                    let oldValue = $(numberQuantity).val();
+                    let newVal = 0;
+                    newVal = parseInt(oldValue) + 1;
+                    $(numberQuantity).val(newVal);
+
+                });
+            
+            });
+
+            $('#hui_add_to_cart').on('click', function (e) {
+                e.preventDefault();
+
+                    if($(this).data('user-id') !== -1) {
+                        let data = {
+                            'product_id': $(this).data('product-id'),
+                            'user_id': $(this).data('user-id'),
+                            'quantity': $('.product__details__quantity input').val(),
+                        }
+                        $.ajax({
+                            type: 'GET',
+                            url: '/user/cart/add',
+                            data: data,
+                            async: false,
+                            success: function(response) {
+                                alert(response.success);
+                                
+                            },
+                            error: function(response) {
+                                alert(response.responseJSON.error);
+                            }
+                        });
+                    }
+            });
+
+        })(jQuery);
+    </script>
+@endpush

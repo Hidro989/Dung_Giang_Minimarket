@@ -1,0 +1,176 @@
+[33mcommit b3051504497a1668fb46ce26fe45c5c243faa294[m[33m ([m[1;36mHEAD -> [m[1;32mhui_category[m[33m, [m[1;32mmain[m[33m)[m
+Author: Hydro998 <huynguyenquang989@gmail.com>
+Date:   Tue Aug 29 11:57:57 2023 +0700
+
+    done change password and upadete user information
+
+[33mcommit 23c62a781bcff5a9ca0d7cdd22d86c80ec74b992[m[33m ([m[1;31morigin/main[m[33m)[m
+Merge: c915be2 f72f93b
+Author: Hidro989 <57631757+Hidro989@users.noreply.github.com>
+Date:   Wed Aug 23 14:45:57 2023 +0700
+
+    Merge pull request #7 from Hidro989/hui_category
+    
+    fix bug fullname
+
+[33mcommit f72f93bc27d3690bafb5dadf99675a23102c8e88[m[33m ([m[1;31morigin/hui_category[m[33m)[m
+Author: Hydro998 <huynguyenquang989@gmail.com>
+Date:   Wed Aug 23 14:44:28 2023 +0700
+
+    fix bug fullname
+
+[33mcommit c915be256ea66fc2cf3c226b2333d6fd01593d69[m
+Merge: 3a2d076 706f594
+Author: Hidro989 <57631757+Hidro989@users.noreply.github.com>
+Date:   Wed Aug 23 11:40:28 2023 +0700
+
+    Merge pull request #6 from Hidro989/hui_category
+    
+    update db & screen changePass, user infor
+
+[33mcommit 706f5940933da39a3d420cd46700f1b2bbca563e[m
+Merge: 6b2a1cb 3a2d076
+Author: Hidro989 <57631757+Hidro989@users.noreply.github.com>
+Date:   Wed Aug 23 11:40:19 2023 +0700
+
+    Merge branch 'main' into hui_category
+
+[33mcommit 6b2a1cb3169d01eb464548052292412f447b804d[m
+Author: Hydro998 <huynguyenquang989@gmail.com>
+Date:   Wed Aug 23 11:37:07 2023 +0700
+
+    update db & screen changePass, user infor
+
+[33mcommit 3a2d07647f2cc42f6061bcdb8b8ab93b15551980[m
+Merge: 6a9f954 5acf322
+Author: Hidro989 <57631757+Hidro989@users.noreply.github.com>
+Date:   Wed Aug 23 11:35:07 2023 +0700
+
+    Merge pull request #5 from Hidro989/product
+    
+    Product
+
+[33mcommit 5acf322b20c4c2946f8a24f9cedb83b762793983[m
+Merge: 8f06c38 6a9f954
+Author: Daidz <lodaivll01@gmail.com>
+Date:   Wed Aug 23 11:31:31 2023 +0700
+
+    Merge remote-tracking branch 'origin/main' into product
+
+[33mcommit 8f06c3805664b47aca95cdeaf2bdea183ea6400b[m
+Author: Daidz <lodaivll01@gmail.com>
+Date:   Wed Aug 23 11:27:36 2023 +0700
+
+    done simple product
+
+[33mcommit 6a9f9543054a0d867fe140f46fe1cf3e8db93b76[m
+Merge: 0ebafff ed05c8d
+Author: Hidro989 <57631757+Hidro989@users.noreply.github.com>
+Date:   Tue Aug 22 12:41:19 2023 +0700
+
+    Merge pull request #4 from Hidro989/hui_category
+    
+    done register
+
+[33mcommit ed05c8d0e14dfd1a17472e564a17eb9ce1e22142[m
+Author: Hydro998 <huynguyenquang989@gmail.com>
+Date:   Tue Aug 22 12:04:40 2023 +0700
+
+    done register
+
+[33mcommit 35f8cad50c7de37b44cf2c07cbfd9786d36569f0[m
+Merge: f2808b0 0ebafff
+Author: Daidz <lodaivll01@gmail.com>
+Date:   Mon Aug 21 22:09:09 2023 +0700
+
+    Merge remote-tracking branch 'origin/main' into product
+
+[33mcommit f2808b02d6ac6df01510787ea581453a626364e1[m
+Author: Daidz <lodaivll01@gmail.com>
+Date:   Mon Aug 21 22:06:10 2023 +0700
+
+    no
+
+[33mcommit 0ebafff40a13951b4b90bfdf017722a51fd710c7[m
+Merge: 5d64bd1 6456274
+Author: Hidro989 <57631757+Hidro989@users.noreply.github.com>
+Date:   Mon Aug 21 22:03:17 2023 +0700
+
+    Merge pull request #3 from Hidro989/product
+    
+    product front-end design
+
+[33mcommit 6456274c163268dd1fda2f9f0b82010e60567e6f[m
+Merge: 6957cf9 5d64bd1
+Author: Hidro989 <57631757+Hidro989@users.noreply.github.com>
+Date:   Mon Aug 21 22:03:07 2023 +0700
+
+    Merge branch 'main' into product
+
+[33mcommit 6957cf970c6aa854d8e92d493642aaeee8507590[m
+Author: Daidz <lodaivll01@gmail.com>
+Date:   Mon Aug 21 22:00:47 2023 +0700
+
+    product front-end design
+
+[33mcommit 5d64bd1caa3e9af12ce99bcc5b795f69e3493225[m
+Merge: 17fef72 4a4ad1b
+Author: Hidro989 <57631757+Hidro989@users.noreply.github.com>
+Date:   Mon Aug 21 21:57:08 2023 +0700
+
+    Merge pull request #2 from Hidro989/hui_category
+    
+    update middleware
+
+[33mcommit 4a4ad1be0417c4cf4e66887235f351ba94d4c086[m
+Merge: 523e508 17fef72
+Author: Hidro989 <57631757+Hidro989@users.noreply.github.com>
+Date:   Mon Aug 21 21:56:57 2023 +0700
+
+    Merge branch 'main' into hui_category
+
+[33mcommit 523e508aa61fda89556bed59e5ef3800c05f52b2[m
+Author: Hydro998 <huynguyenquang989@gmail.com>
+Date:   Mon Aug 21 21:54:31 2023 +0700
+
+    update middleware
+
+[33mcommit 17fef72862e482c54b5ab8ade1e2a254ff0fd007[m
+Merge: c59d373 9fffe5f
+Author: Hidro989 <57631757+Hidro989@users.noreply.github.com>
+Date:   Fri Aug 18 14:19:30 2023 +0700
+
+    Merge pull request #1 from Hidro989/hui_category
+    
+    update layout admin
+
+[33mcommit 9fffe5f1923b722f78e4ddd2ace555620841ea7b[m
+Merge: f719db2 c59d373
+Author: Hidro989 <57631757+Hidro989@users.noreply.github.com>
+Date:   Fri Aug 18 14:19:15 2023 +0700
+
+    Merge branch 'main' into hui_category
+
+[33mcommit f719db2a799fa7b61795fe5ba47576f315df05ce[m
+Author: Hydro998 <huynguyenquang989@gmail.com>
+Date:   Fri Aug 18 14:13:59 2023 +0700
+
+    update layout admin
+
+[33mcommit c59d373e1096f291c06e2775a10ff60e51752fc8[m
+Author: Hydro998 <huynguyenquang989@gmail.com>
+Date:   Fri Aug 18 08:57:02 2023 +0700
+
+    update admin interface
+
+[33mcommit 131f4c1648412128f8bf03bff93694d50e838ff6[m
+Author: Hydro998 <huynguyenquang989@gmail.com>
+Date:   Thu Aug 17 22:01:52 2023 +0700
+
+    init model & DB
+
+[33mcommit 55ef5a5cf6e20bbb06e6fdee78bb7fe8d6e9cca5[m
+Author: Hydro998 <huynguyenquang989@gmail.com>
+Date:   Mon Aug 14 13:39:04 2023 +0700
+
+    first commit

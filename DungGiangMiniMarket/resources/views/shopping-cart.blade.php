@@ -2,56 +2,7 @@
 @section('title', 'Giỏ hàng')
 @section('content')
     <!-- Hero Section Begin -->
-    <section class="hero hero-normal">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="hero__categories">
-                        <div class="hero__categories__all">
-                            <i class="fa fa-bars"></i>
-                            <span>All departments</span>
-                        </div>
-                        <ul>
-                            <li><a href="#">Fresh Meat</a></li>
-                            <li><a href="#">Vegetables</a></li>
-                            <li><a href="#">Fruit & Nut Gifts</a></li>
-                            <li><a href="#">Fresh Berries</a></li>
-                            <li><a href="#">Ocean Foods</a></li>
-                            <li><a href="#">Butter & Eggs</a></li>
-                            <li><a href="#">Fastfood</a></li>
-                            <li><a href="#">Fresh Onion</a></li>
-                            <li><a href="#">Papayaya & Crisps</a></li>
-                            <li><a href="#">Oatmeal</a></li>
-                            <li><a href="#">Fresh Bananas</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-9">
-                    <div class="hero__search">
-                        <div class="hero__search__form">
-                            <form action="#">
-                                <div class="hero__search__categories">
-                                    All Categories
-                                    <span class="arrow_carrot-down"></span>
-                                </div>
-                                <input type="text" placeholder="What do yo u need?">
-                                <button type="submit" class="site-btn">SEARCH</button>
-                            </form>
-                        </div>
-                        <div class="hero__search__phone">
-                            <div class="hero__search__phone__icon">
-                                <i class="fa fa-phone"></i>
-                            </div>
-                            <div class="hero__search__phone__text">
-                                <h5>+65 11.188.888</h5>
-                                <span>support 24/7 time</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    @include('includes.hero')
     <!-- Hero Section End -->
 
     <!-- Breadcrumb Section Begin -->
@@ -81,80 +32,40 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th class="shoping__product">Products</th>
-                                    <th>Price</th>
-                                    <th>Quantity</th>
-                                    <th>Total</th>
+                                    <th class="shoping__product">Sản phẩm</th>
+                                    <th>Giá</th>
+                                    <th>Số lượng</th>
+                                    <th>Thành tiền</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="shoping__cart__item">
-                                        <img src="img/cart/cart-1.jpg" alt="">
-                                        <h5>Vegetable’s Package</h5>
-                                    </td>
-                                    <td class="shoping__cart__price">
-                                        $55.00
-                                    </td>
-                                    <td class="shoping__cart__quantity">
-                                        <div class="quantity">
-                                            <div class="pro-qty">
-                                                <input type="text" value="1">
+                                @if ( ! empty($carts) )
+                                    @foreach ($carts as $item)
+                                    <tr data-id="{{$item->id}}">
+                                        <td class="shoping__cart__item">
+                                            <img src="{{ url($item->featured_image)}}" alt="">
+                                            <h5>{{$item->name}}</h5>
+                                        </td>
+                                        <td class="shoping__cart__price" data-price="{{$item->unit_price}}">
+                                            {{$item->unit_price}}
+                                        </td>
+                                        <td class="shoping__cart__quantity">
+                                            <div class="quantity">
+                                                <div class="pro-qty">
+                                                    <input type="text" value="{{$item->quantity}}">
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td class="shoping__cart__total">
-                                        $110.00
-                                    </td>
-                                    <td class="shoping__cart__item__close">
-                                        <span class="icon_close"></span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="shoping__cart__item">
-                                        <img src="img/cart/cart-2.jpg" alt="">
-                                        <h5>Fresh Garden Vegetable</h5>
-                                    </td>
-                                    <td class="shoping__cart__price">
-                                        $39.00
-                                    </td>
-                                    <td class="shoping__cart__quantity">
-                                        <div class="quantity">
-                                            <div class="pro-qty">
-                                                <input type="text" value="1">
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="shoping__cart__total">
-                                        $39.99
-                                    </td>
-                                    <td class="shoping__cart__item__close">
-                                        <span class="icon_close"></span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="shoping__cart__item">
-                                        <img src="img/cart/cart-3.jpg" alt="">
-                                        <h5>Organic Bananas</h5>
-                                    </td>
-                                    <td class="shoping__cart__price">
-                                        $69.00
-                                    </td>
-                                    <td class="shoping__cart__quantity">
-                                        <div class="quantity">
-                                            <div class="pro-qty">
-                                                <input type="text" value="1">
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="shoping__cart__total">
-                                        $69.99
-                                    </td>
-                                    <td class="shoping__cart__item__close">
-                                        <span class="icon_close"></span>
-                                    </td>
-                                </tr>
+                                        </td>
+                                        <td class="shoping__cart__total">
+                                            {{$item->unit_price * $item->quantity}}
+                                        </td>
+                                        <td class="shoping__cart__item__close">
+                                            <span class="icon_close"></span>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                @endif
                             </tbody>
                         </table>
                     </div>
@@ -163,30 +74,30 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="shoping__cart__btns">
-                        <a href="#" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
-                        <a href="#" class="primary-btn cart-btn cart-btn-right"><span class="icon_loading"></span>
-                            Upadate Cart</a>
+                        <a href="#" class="primary-btn cart-btn">TIẾP TỤC MUA HÀNG</a>
+                        <a href="#" class="primary-btn cart-btn cart-btn-right" id="hui-btn-update-cart"><span class="icon_loading"></span>
+                            CẬP NHẬT GIỎ HÀNG</a>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="shoping__continue">
-                        <div class="shoping__discount">
-                            <h5>Discount Codes</h5>
+                        {{-- <div class="shoping__discount">
+                            <h5>Mã giảm giá</h5>
                             <form action="#">
                                 <input type="text" placeholder="Enter your coupon code">
                                 <button type="submit" class="site-btn">APPLY COUPON</button>
                             </form>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="shoping__checkout">
-                        <h5>Cart Total</h5>
+                        <h5>Tổng số giỏ hàng</h5>
                         <ul>
-                            <li>Subtotal <span>$454.98</span></li>
-                            <li>Total <span>$454.98</span></li>
+                            {{-- <li>Tổng phụ <span></span></li> --}}
+                            <li>Tổng <span id="hui-total-cart"></span></li>
                         </ul>
-                        <a href="#" class="primary-btn">PROCEED TO CHECKOUT</a>
+                        <a href="{{url('/checkout')}}" class="primary-btn">Tiến hành thanh toán</a>
                     </div>
                 </div>
             </div>
@@ -194,3 +105,129 @@
     </section>
     <!-- Shoping Cart Section End -->    
 @endsection
+
+@push('scripts')
+    <script>
+        'use strict';
+    (function ($) {
+        
+        setCurrencncey('.shoping__cart__price');
+        setCurrencncey('.shoping__cart__total');
+        loadTotal();
+
+        $('.pro-qty').each(function (index, ele) {
+            let numberQuantity = $(ele).find('input');
+            let unitPirce = $(ele).closest('.shoping__cart__quantity').prev('.shoping__cart__price');
+            let cartTotal = $(ele).closest('.shoping__cart__quantity').next('.shoping__cart__total');
+
+            // de cart
+            $(ele).find('.dec').on('click', function(){
+                let oldValue = $(numberQuantity).val();
+                let newVal = 0;
+                if(oldValue > 0) {
+                    newVal = parseInt(oldValue) - 1;
+                }
+                $(numberQuantity).val(newVal);
+                $(cartTotal).text(formatCurrency( newVal * $(unitPirce).data('price') ));
+                loadTotal();
+            });
+
+            // decrement cart
+            $(ele).find('.inc').on('click', function(){
+                let oldValue = $(numberQuantity).val();
+                let newVal = 0;
+                newVal = parseInt(oldValue) + 1;
+                $(numberQuantity).val(newVal);
+                $(cartTotal).text(formatCurrency( newVal * $(unitPirce).data('price') ));
+                loadTotal();
+            });
+            
+            // change quantity
+            $(ele).find('input').on('change', function(e) {
+                $(cartTotal).text(formatCurrency( $(this).val() * $(unitPirce).data('price') ));
+                loadTotal();
+            });
+            
+
+        });
+
+        $('.shoping__cart__item__close').each(function (index, ele) {
+            $(ele).on('click', function (e) {
+                let data = {
+                    'id' : $(ele).parent().data('id'),
+                }
+
+                $.ajax({
+                    type: 'GET',
+                    url: '/user/cart/destroy',
+                    data: data,
+                    async: false,
+                    success: function(response) {
+                        // alert(response.success);
+                    },
+                    error: function(response) {
+                        // handleError(response);
+                    }
+                });
+                $(ele).parent().remove();        
+                loadTotal();
+
+            });
+        });
+
+        $('#hui-btn-update-cart').on('click', function (e) {
+            e.preventDefault();
+            let cartItems = $('.shoping__cart__table').find('tbody > tr');
+            $(cartItems).each(function (index, ele){
+                let data = {
+                    'id': $(ele).data('id'),
+                    'quantity': $(ele).find('.shoping__cart__quantity input').val(),
+                };
+
+                $.ajax({
+                    type: 'GET',
+                    url: '/user/cart/update',
+                    data: data,
+                    async: false,
+                    success: function(response) {
+                        // alert(response.success);
+                    },
+                    error: function(response) {
+                        // handleError(response);
+                    }
+                });
+                
+            });
+        });
+
+        
+
+        function loadTotal(){
+            let total = 0;
+            $('.shoping__cart__total').each(function (index, ele) {
+                var number = Number($(ele).text().replace(/[^0-9-]+/g,""));
+                total += number;
+                
+            });
+            $('#hui-total-cart').text(formatCurrency(total));
+        }
+
+        function setCurrencncey( selector ) {
+            $(selector).each(function (index, ele) {
+            let oldPrice = $(ele).text();
+                $(ele).text(formatCurrency(oldPrice));
+            });
+        }
+
+
+        function formatCurrency(currency) {
+            const VND = new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+            });
+            return VND.format(currency);
+        }
+
+    })(jQuery);
+    </script>
+@endpush

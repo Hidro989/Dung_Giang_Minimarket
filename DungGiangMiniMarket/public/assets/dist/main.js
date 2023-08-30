@@ -205,40 +205,6 @@
     var proQty = $('.pro-qty');
     proQty.prepend('<span class="dec qtybtn">-</span>');
     proQty.append('<span class="inc qtybtn">+</span>');
-    proQty.on('click', '.qtybtn', function () {
-        var $button = $(this);
-        var oldValue = $button.parent().find('input').val();
-        if ($button.hasClass('inc')) {
-            var newVal = parseFloat(oldValue) + 1;
-        } else {
-            // Don't allow decrementing below zero
-            if (oldValue > 0) {
-                var newVal = parseFloat(oldValue) - 1;
-            } else {
-                newVal = 0;
-            }
-        }
-        $button.parent().find('input').val(newVal);
-    });
-
-    /*-------------------
-		Validation
-	--------------------- */
-
-    var forms = document.querySelectorAll('.needs-validation')
-    // console.log(forms);
-    // Loop over them and prevent submission
-    Array.prototype.slice.call(forms)
-        .forEach(function (form) {
-        form.addEventListener('submit', function (event) {
-            if (!form.checkValidity()) {
-            event.preventDefault()
-            event.stopPropagation()
-            }
-
-            form.classList.add('was-validated')
-    }, false)
-    })
 
 
     $('.carousel').carousel({
@@ -313,5 +279,35 @@
             }
         });
     });
+
+
+    /*-------------------
+		Add to cart
+	--------------------- */
+
+    $('.btnAddToCart').each( function (index, ele) {
+        $(ele).on('click', function(e) {
+            e.preventDefault();
+            if($(ele).data('user-id') !== -1) {
+                let data = {
+                    'product_id': $(ele).data('product-id'),
+                    'user_id': $(ele).data('user-id'),
+                }
+                $.ajax({
+                    type: 'GET',
+                    url: '/user/cart/add',
+                    data: data,
+                    async: false,
+                    success: function(response) {
+                        alert(response.success);
+                        
+                    },
+                    error: function(response) {
+                        alert(response.responseJSON.error);
+                    }
+                });
+            }
+        });
+    } );
 
 })(jQuery);
