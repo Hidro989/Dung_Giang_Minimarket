@@ -26,7 +26,7 @@
     <div class="container">
         <form action="{{ route('admin.product.update',$productEdit->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
-            @method('UPDATE')
+            @method('PUT')
             <div class="form-group">
                 <label for="name">Tên sản phẩm:</label>
                 <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ $productEdit->name}}">
@@ -59,7 +59,7 @@
             <div class="form-group">
                 <label for="featured_image">Ảnh đặc trưng:</label>
                 <input type="file" name="featured_image" class="form-control-file" id="featuredImageInput" data-imageUrl="{{ $productEdit->featured_image}}" onchange="previewFeaturedImage(event)" accept=".jpg, .jpeg, .png">
-                <img class="mt-3" id="featuredImagePreview" src="#" alt="Featured Image Preview" style="max-width: 200px; display: none;">
+                <img class="mt-3" id="featuredImagePreview" src="{{url($productEdit->featured_image)}}" alt="Featured Image Preview" style="max-width: 200px;">
                 @error('featured_image')
                     <span class="text-danger">{{ $message }}</span>
                 @enderror
@@ -68,8 +68,8 @@
             <div class="form-group">
                 <label for="video">Video:</label>
                 <input type="file" name="video" class="form-control-file" id="videoInput" data-videoUrl="{{ $productEdit->video}}"accept=".mp4, .avi, .mov" onchange="previewVideo(event)">
-                <video class="mt-3" id="videoPreview" controls style="max-width: 400px; display: none;">
-                    <source id="videoSource" src="" type="video/mp4">
+                <video class="mt-3" id="videoPreview" controls style="max-width: 400px;">
+                    <source id="videoSource" src="{{url($productEdit->video)}}" type="video/mp4">
                 </video>
             </div>
             
@@ -90,10 +90,10 @@
             <div id="variantFieldsGroup" style="display: none">
                 <div class="variant-control">
                     <div id="add-classify" class="btn btn-primary mb-3">Thêm nhóm phân loại</div>
-                    @foreach($productEdit->attributes as $attribute)
-                    <div class="input-group classify">
+                    @foreach($productEdit->attributes as $i=>$attribute)
+                    <div class="input-group classify mt-3">
                         <div class="input-group-prepend">
-                          <span class="input-group-text">Phân loại 1</span>
+                          <span class="input-group-text">Phân loại {{ $i + 1}}</span>
                         </div>
                         <input type="text" aria-label="First name" class="form-control" name="attributeName[]" placeholder="VD: Màu" oninput="generateTable()" value="{{ $attribute->name}}">
                         <input type="text" aria-label="Last name" class="form-control" name="attributeValue[]" placeholder="VD: đỏ,vàng,xanh" oninput="generateTable()" value="{{ $attribute->value}}">
@@ -114,10 +114,7 @@
                         </div>
                     </div>
                 </div>
-                <table id="variant-table" class="table table-bordered mt-4">
-                    <thead>
-                        <th></th>
-                    </thead>
+                <table id="variant-table" class="table table-bordered mt-4" data-variants="{{ $productEdit->variants }}">
                 </table>
             </div>
 
@@ -151,11 +148,12 @@
     <script>
         $(document).ready(function(){
             toggleVariantFields();
+            var variants = $('#variant-table').data('variants');
+            generateTable(variants);
         })
         function previewFeaturedImage(event) {
             var input = event.target;
             var previewImage = document.getElementById("featuredImagePreview");
-        
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
         
@@ -262,7 +260,7 @@
             }
         }
 
-        function generateTable(){
+        function generateTable(variant = null){
             $('#variant-table').bootstrapTable('destroy');
             let [classify1,classify2] = classify;
             let name1,value1,name2,value2;
@@ -277,8 +275,8 @@
                         data.push({
                             classify1: `${value} <input type="hidden" name="variant[${index}][name][]" value="${value}">`,
                             feturedImage: `<input type="file" name="variant[${index}]" accept=".jpg,.png,.jpeg">`,
-                            price: `<input type="number" class="form-control variant-price" name="variant[${index}][unit_price]">`,
-                            stock: `<input type="number" class="form-control variant-stock" name="variant[${index}][stock]">`
+                            price: `<input type="number" class="form-control variant-price" name="variant[${index}][unit_price]" value="${variant ? variant[index].unit_price : ''}">`,
+                            stock: `<input type="number" class="form-control variant-stock" name="variant[${index}][stock]" value="${variant ? variant[index].stock : ''}">`
                         })
                     }
                 }
@@ -296,8 +294,8 @@
                                 classify1: `${val1} <input type="hidden" name="variant[${index}][name][]" value="${val1}">`,
                                 classify2: `${val2} <input type="hidden" name="variant[${index}][name][]" value="${val2}"`,
                                 feturedImage: `<input type="file" name="variant[${index}]" accept=".jpg,.png,.jpeg">`,
-                                price: `<input type="text" class="form-control variant-price" name="variant[${index}][unit_price]">`,
-                                stock: `<input type="text" class="form-control variant-stock" name="variant[${index}][stock]">`
+                                price: `<input type="text" class="form-control variant-price" name="variant[${index}][unit_price]" value="${variant ? variant[index].unit_price : ''}">`,
+                                stock: `<input type="text" class="form-control variant-stock" name="variant[${index}][stock]" value="${variant ? variant[index].stock : ''}">`
                             })
                             index++;
                         }

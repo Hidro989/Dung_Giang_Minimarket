@@ -4,6 +4,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserController;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
@@ -51,6 +52,7 @@ Route::get('logout', [ UserController::class, 'logout' ] )->name('logout');
 Route::post('handleLogin', [ UserController::class, 'handle_login' ] )->name('handleLogin');
 Route::post('handleRegister', [ UserController::class, 'handle_register' ] )->name('handleRegister');
 Route::get('register', [ UserController::class, 'register' ] )->name('register')->middleware('alreadyLogin');
+Route::resource('review',ReviewController::class);
 
 
 Route::middleware('loginAdmin')->group( function () {

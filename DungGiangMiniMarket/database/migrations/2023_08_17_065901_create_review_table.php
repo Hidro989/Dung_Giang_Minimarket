@@ -16,6 +16,7 @@ class CreateReviewTable extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
+            $table->integer('product_id');
             $table->integer('stars');
             $table->string('content')->nullable();
             $table->date('created_date');

@@ -61,7 +61,7 @@
             
             <div class="form-group">
                 <label for="video">Video:</label>
-                <input type="file" name="video" class="form-control-file" id="videoInput" accept=".mp4, .avi, .mov" onchange="previewVideo(event)">
+                <input type="file" name="video" class="form-control-file" id="videoInput" accept=".mp4,.avi,.mov" onchange="previewVideo(event)">
                 <video class="mt-3" id="videoPreview" controls style="max-width: 400px; display: none;">
                     <source id="videoSource" src="" type="video/mp4">
                 </video>
