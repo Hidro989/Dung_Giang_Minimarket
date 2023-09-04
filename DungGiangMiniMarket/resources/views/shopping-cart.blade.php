@@ -97,7 +97,11 @@
                             {{-- <li>Tổng phụ <span></span></li> --}}
                             <li>Tổng <span id="hui-total-cart"></span></li>
                         </ul>
-                        <a href="{{url('/checkout')}}" class="primary-btn">Tiến hành thanh toán</a>
+                        
+                        @if( ( ! empty($user)) && ( ! empty($carts)) )
+                            <a href="{{ route('user.order.checkout', $user->id )  }}" class="primary-btn">Tiến hành thanh toán</a>
+                        @endif
+                        
                     </div>
                 </div>
             </div>
@@ -190,7 +194,7 @@
                     data: data,
                     async: false,
                     success: function(response) {
-                        // alert(response.success);
+                        alert(response.success);
                     },
                     error: function(response) {
                         // handleError(response);
@@ -219,14 +223,6 @@
             });
         }
 
-
-        function formatCurrency(currency) {
-            const VND = new Intl.NumberFormat('vi-VN', {
-            style: 'currency',
-            currency: 'VND',
-            });
-            return VND.format(currency);
-        }
 
     })(jQuery);
     </script>

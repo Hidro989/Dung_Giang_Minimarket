@@ -146,11 +146,13 @@
                     <div class="col-lg-3 col-md-4 col-sm-6 mix {{ 'category'.$product->category_id }} fresh-meat">
                         <div class="featured__item">
                             <div class="featured__item__pic set-bg" data-setbg="{{ url($product->featured_image) }}">
-                                <ul class="featured__item__pic__hover" >
-                                    <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                    {{-- <li><a href="{{ route('user.cart.add', ['product_id' => $product->id]) }}"><i class="fa fa-shopping-cart"></i></a></li> --}}
-                                    <li><a href="#" class="btnAddToCart" data-product-id="{{$product->id}}" data-user-id="{{isset($user) ? $user->id : -1}}"><i class="fa fa-shopping-cart"></i></a></li>
-                                </ul>
+                                @if ( 0 === $product->is_variant)
+                                    <ul class="featured__item__pic__hover" >
+                                        <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+                                        {{-- <li><a href="{{ route('user.cart.add', ['product_id' => $product->id]) }}"><i class="fa fa-shopping-cart"></i></a></li> --}}
+                                        <li><a href="#" class="btnAddToCart" data-product-id="{{$product->id}}" data-user-id="{{isset($user) ? $user->id : -1}}"><i class="fa fa-shopping-cart"></i></a></li>
+                                    </ul>
+                                @endif
                             </div>
                             <div class="featured__item__text">
                                 <h6><a href="{{ route('product.show', $product->id)}}">{{ $product->name }}</a></h6>

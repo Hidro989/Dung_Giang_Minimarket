@@ -7,12 +7,14 @@ use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
-    public function index() {
+    public function index( $user_id ) {
+        $user = DB::table('users')->where('id', $user_id)->first();
         $carts = DB::table('cart_items')
+        ->where('user_id', $user_id)
         ->join('products', 'cart_items.product_id', '=', 'products.id')
         ->select( 'cart_items.*', 'products.name', 'products.unit_price', 'products.featured_image' )
         ->get();
-        return view('shopping-cart', compact('carts'));
+        return view('shopping-cart', compact('carts', 'user'));
     }
 
     public function add( Request $request ) {

@@ -17,14 +17,15 @@ class CreateProductTable extends Migration
             $table->id();
             $table->integer('category_id');
             $table->string('name');
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
             $table->string('video')->nullable();
             $table->string('featured_image');
-            $table->string('unit_price')->nullable();
+            $table->bigInteger('unit_price')->nullable();
             $table->boolean('is_variant')->default(false);
             $table->string('attribute_ids')->nullable();
             $table->float('weight');
             $table->integer('stock')->nullable();
+            $table->date('created_date')->default(now());
         });
     }
 
