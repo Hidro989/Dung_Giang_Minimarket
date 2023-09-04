@@ -101,6 +101,24 @@
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOrder"
+                    aria-expanded="true" aria-controls="collapseOrder">
+                    <i class="fa fa-fw fa-cog"></i>
+                    <span>Quản lý đơn hàng</span>
+                </a>
+                <div id="collapseOrder" class="collapse" aria-labelledby="headingOrder" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="{{ route('admin.order.index')}}">Danh sách đơn hàng</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCategory"
                     aria-expanded="true" aria-controls="collapseCategory">
                     <i class="fa fa-fw fa-cog"></i>
@@ -108,8 +126,6 @@
                 </a>
                 <div id="collapseCategory" class="collapse" aria-labelledby="headingCategory" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="#">Danh sách loại hàng</a>
-                        <a class="collapse-item" href="cards.html">Thêm</a>
                     </div>
                 </div>
             </li>

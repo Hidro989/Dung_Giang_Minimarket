@@ -18,8 +18,8 @@ class CreateVariantTable extends Migration
             $table->unsignedBigInteger('product_id');
             $table->string('feature_image')->nullable();
             $table->string('attribute_values');
-            $table->integer('unit_price');
-            $table->integer('stock');
+            $table->bigInteger('unit_price');
+            $table->bigInteger('stock');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
     }

@@ -310,4 +310,19 @@
         });
     } );
 
+    $('.hui_price').each(function(index, ele) {
+        let oldValue = $(ele).text();
+        $(ele).text(formatCurrency(oldValue));
+    });
+
+    
+
 })(jQuery);
+
+function formatCurrency(currency) {
+    const VND = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+    });
+    return VND.format(currency);
+}
