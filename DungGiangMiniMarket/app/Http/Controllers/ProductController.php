@@ -19,10 +19,26 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function shop_grid(){
-        $products = Product::with('variants')->paginate(10);
+    public function search(Request $request){
+        $key = $request->input('key');
+        $categories = Category::all();
+        $products = Product::where(function ($query) use ($key){
+            $query->where('name', 'LIKE', '%' . $key . '%');
+        })->with('variants')->paginate(10);
+        $lastProducts = Product::orderBy('id','desc')->take(6)->get();
+        $this->formatProducts($lastProducts);
+        $this->formatProducts($products);
+        return view('shop-grid',compact('products','categories','astProducts'));
+    }
+    public function shop_grid($catetory_id){
+        if($catetory_id == 'all'){
+            $products = Product::with('variants')->paginate(10);
+        }else{
+            $products = Product::where('category_id',$catetory_id)->with('variants')->paginate(10);
+        }
         $categories = Category::all();
         $lastProducts = Product::orderBy('id','desc')->take(6)->get();
+        $this->formatProducts($lastProducts);
         $this->formatProducts($products);
         return view('shop-grid',compact('products','categories','lastProducts'));       
     }

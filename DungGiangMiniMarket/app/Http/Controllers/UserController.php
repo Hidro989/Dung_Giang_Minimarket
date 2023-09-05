@@ -8,11 +8,22 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\View;
+
 
 class UserController extends Controller
 {
     private $user;
+
+    private function formatProducts( $products ){
+        foreach($products as $product){
+            if(count($product->variants) != 0 ){
+                $newPrice = formatCurrency($product->variants->min('unit_price')) ." - ". formatCurrency($product->variants->max('unit_price'));
+                $product->setAttribute('unit_price',$newPrice);
+            }else{
+                $product->setAttribute('unit_price',formatCurrency($product->unit_price));
+            }
+        }
+    }
 
     public function handle_login( Request $request ) {
         $username = $request->input('username');
@@ -73,15 +84,18 @@ class UserController extends Controller
     public function home() {
         $categories = Category::all();
         $products = Product::with('variants')->get();
-        foreach($products as $product){
-            if(count($product->variants) != 0 ){
-                $newPrice = formatCurrency($product->variants->min('unit_price')) ." - ". formatCurrency($product->variants->max('unit_price'));
-                $product->setAttribute('unit_price',$newPrice);
-            }else{
-                $product->setAttribute('unit_price',formatCurrency($product->unit_price));
-            }
-        }
-        return view('home', compact( 'categories','products' ));
+        $ratestProducts = Product::select('products.*', DB::raw('COUNT(reviews.id) as review_count'))
+        ->join('reviews', 'products.id', '=', 'reviews.product_id')
+        ->groupBy('products.id')
+        ->orderByDesc('review_count')
+        ->with('variants')
+        ->take(6)
+        ->get();
+        $lastProducts = Product::orderBy('id','desc')->take(6)->get();
+        $this->formatProducts($lastProducts);
+        $this->formatProducts($products);
+        $this->formatProducts($ratestProducts);
+        return view('home', compact( 'categories','products','lastProducts', 'ratestProducts' ));
     }
 
 

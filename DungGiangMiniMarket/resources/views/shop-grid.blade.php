@@ -34,20 +34,15 @@
                                 <h4>Danh mục</h4>
                                 <ul>
                                     @foreach ($categories as $category)
-                                        <li><a href="#">{{ $category->name}} </a></li>
+                                        <li><a href="{{ route('product.shop_grid', $category->id)}}">{{ $category->name }} </a></li>
                                     @endforeach
-                                    <li><a href="#">Rau củ</a></li>
-                                    <li><a href="#">Trái cây</a></li>
-                                    <li><a href="#">Nột thất</a></li>
-                                    <li><a href="#">Công nghệ</a></li>
-                                    <li><a href="#">Nước ngọt</a></li>
                                 </ul>
                             </div>
                             <div class="sidebar__item">
                                 <h4>Giá</h4>
                                 <div class="price-range-wrap">
                                     <div class="price-range ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"
-                                        data-min="10000" data-max="500000">
+                                        data-min="10000" data-max="50000000">
                                         <div class="ui-slider-range ui-corner-all ui-widget-header"></div>
                                         <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
                                         <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
@@ -67,7 +62,7 @@
                                         <div class="latest-prdouct__slider__item">
                                             @for($i = 0 ; $i < 3 ; $i ++)
                                                 @if(isset($lastProducts[$i]))
-                                                <a href="{{route('product.show',$lastProducts[$i]->id)}}" class="latest-product__item">
+                                                <a href="{{route('product.show',$lastProducts[$i]->id)}}" class="latest-product__item d-flex flex-column">
                                                     <div class="latest-product__item__pic">
                                                         <img src="{{ url($lastProducts[$i]->featured_image)}}" alt="">
                                                     </div>
@@ -108,8 +103,8 @@
                                         <select onchange="sortProduct(this)">
                                             <option value="">Lựa chọn</option>
                                             <option value="price">Giá (Tăng dần)</option>
-                                            <option value="name">Tên (A-Z)</option>
                                             <option value="price_desc">Giá (Giảm dần)</option>
+                                            <option value="name">Tên (A-Z)</option>
                                             <option value="name_desc">Tên (Z-A)</option>
                                         </select>
                                     </div>
@@ -165,13 +160,13 @@
         var productList = document.getElementById('product-list')
         function sortProduct(element){
             switch(element.value){
-                case 'price':
-                    items.sort((a, b) => parseInt(b.querySelector('h5').innerText) - parseInt(a.querySelector('h5').innerText))
+                case 'price_desc':
+                    items.sort((a, b) => parseInt(b.querySelector('h5').innerText.split('.').join('')) - parseInt(a.querySelector('h5').innerText.split('.').join('')))
                     productList.innerHTML = ''
                     items.forEach(item => productList.appendChild(item))
                     break
-                case 'price_desc':
-                    items.sort((a, b) => parseInt(a.querySelector('h5').innerText) - parseInt(b.querySelector('h5').innerText))
+                case 'price':
+                    items.sort((a, b) => parseInt(a.querySelector('h5').innerText.split('.').join('')) - parseInt(b.querySelector('h5').innerText.split('.').join('')))
                     productList.innerHTML = ''
                     items.forEach(item => productList.appendChild(item))
                     break
