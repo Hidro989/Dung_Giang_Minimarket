@@ -20,20 +20,21 @@ use Illuminate\Support\Facades\Storage;
 |
 */
 
-Route::get('/storage/{filename}', function ($filename) {
-    $path = storage_path('app/public/' . $filename);
-    if (!Storage::exists($path)) {
-        abort(404);
-    }
-    return response()->file($path);
-})->where('filename', '.*');
+// Route::get('/storage/{filename}', function ($filename) {
+//     $path = storage_path('app/public/' . $filename);
+//     if (!Storage::exists($path)) {
+//         abort(404);
+//     }
+//     return response()->file($path);
+// })->where('filename', '.*');
 
 Route::get('/contact', function () {
     return view('contact');
 });
 
 
-Route::get('/shop-grid',[ProductController::class,'shop_grid']);
+Route::get('/shop-grid/{category_id}',[ProductController::class,'shop_grid'])->name('product.shop_grid');
+Route::get('/product/search',[ProductController::class,'search'])->name('product.search');
 
 Route::get('product/find',[ProductController::class,'find']);
 Route::get('product/{id}', [ProductController::class, 'show'])->name('product.show');

@@ -113,18 +113,11 @@
             </div>
             @endif
         </div>
-        <nav class="humberger__menu__nav mobile-menu">
-            <ul>
-                <li class="active"><a href="./index.html">Trang chủ</a></li>
-                <li><a href="/shop-grid">Cửa hàng</a></li>
-                <li><a href="./contact.html">Liên hệ</a></li>
-            </ul>
-        </nav>
         <div id="mobile-menu-wrap"></div>
         <div class="humberger__menu__contact">
             <ul>
                 <li><i class="fa fa-envelope"></i> dunggiang@gmail.com</li>
-                <li>Giao hàng miễn phí cho tất cả đơn hàng 200k</li>
+                <li>Giao hàng miễn phí cho tất cả đơn hàng trên 200k</li>
             </ul>
         </div>
     </div>
@@ -197,9 +190,7 @@
                     <nav class="header__menu">
                         <ul>
                             <li class="active"><a href="{{ route('/') }}">Trang chủ</a></li>
-
-
-                            <li><a href="/shop-grid">Cửa hàng</a></li>
+                            <li><a href="{{ route('product.shop_grid','all')}}">Cửa hàng</a></li>
                             <li><a href="{{url('/contact')}}">Liên hệ</a></li>
 
 
