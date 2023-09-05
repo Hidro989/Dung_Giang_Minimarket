@@ -40,6 +40,7 @@ class ProductController extends Controller
     {
         $products = Product::with('variants')->with('category')->get();
         $this->formatProducts($products);
+        $categories = Category::all();
         return view('admin.product.index',compact('products','categories'));
     }
 
