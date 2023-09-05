@@ -19,6 +19,13 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function shop_grid(){
+        $products = Product::with('variants')->paginate(10);
+        $categories = Category::all();
+        $lastProducts = Product::orderBy('id','desc')->take(6)->get();
+        $this->formatProducts($products);
+        return view('shop-grid',compact('products','categories','lastProducts'));       
+    }
     private function formatProducts( $products ){
         foreach($products as $product){
             if(count($product->variants) != 0 ){
@@ -33,7 +40,8 @@ class ProductController extends Controller
     {
         $products = Product::with('variants')->with('category')->get();
         $this->formatProducts($products);
-        return view('admin.product.index',compact('products'));
+        $categories = Category::all();
+        return view('admin.product.index',compact('products','categories'));
     }
 
     /**
@@ -178,6 +186,7 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::with('variants')->with('category')->find($id);
+        $categories = Category::all();
         if (!$product) {
             abort(404);
         }
@@ -196,7 +205,7 @@ class ProductController extends Controller
         }else{
             $product->setAttribute('unit_price',formatCurrency($product->unit_price));
         }
-        return view('shop-detail', compact('product', 'attributes','relatedProducts','reviews'));
+        return view('shop-detail', compact('product', 'attributes','relatedProducts','reviews','categories'));
     }
 
     /**
