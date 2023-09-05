@@ -38,9 +38,7 @@ Route::get('/contact', function () {
 });
 
 
-Route::get('/shop-grid', function () {
-    return view('shop-grid');
-});
+Route::get('/shop-grid',[ProductController::class,'shop_grid']);
 
 Route::get('product/find',[ProductController::class,'find']);
 Route::get('product/{id}', [ProductController::class, 'show'])->name('product.show');

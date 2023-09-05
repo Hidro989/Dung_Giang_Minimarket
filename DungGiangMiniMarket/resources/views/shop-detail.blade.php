@@ -5,6 +5,41 @@
     $user = Cookie::get('user');
     $user = isset($user) && (json_decode($user) !== null) ? json_decode($user) : null;
 @endphp
+@php
+    $star1 = 0;
+    $star2 = 0;
+    $star3 = 0;
+    $star4 = 0;
+    $star5 = 0;
+    if(isset($product->reviews)){
+        foreach ($product->reviews as $review) {
+            switch($review->stars){
+                case '1':
+                    $star1++;
+                    break;
+                case '2':
+                    $star2++;
+                    break;
+                case '3':
+                    $star3++;
+                    break;
+                case '4':
+                    $star4++;
+                    break;
+                case '5':
+                    $star5++;
+                    break;
+            }
+        }
+    }
+    $totalReviews = $star1 + $star2 + $star3 + $star4 + $star5;
+    $totalStars = $star1*1 + $star2*2 + $star3*3 + $star4*4 + $star5*5;
+    if($totalReviews != 0){
+        $starRate =  $totalStars / $totalReviews;
+    }else{
+        $starRate = 0;
+    }
+@endphp
 @section('content')
 
     <!-- Hero Section Begin -->
@@ -13,9 +48,6 @@
     
 
     <style>
-    body {
-        padding-top: 70px;
-    }
     .btn-grey{
         background-color:#D8D8D8;
         color:#FFF;
@@ -102,12 +134,14 @@
                             <div class="product__details__text">
                                 <h3>{{ $product->name }}</h3>
                                 <div class="product__details__rating">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star-half-o"></i>
-                                    <span>(18 reviews)</span>
+                                    @for($i = 1 ; $i <= 5 ; $i++)
+                                        @if($i <= $starRate)
+                                            <i class="fa fa-star"></i>
+                                        @else
+                                        <i class="fa fa-star-o"></i>
+                                        @endif
+                                    @endfor                                    
+                                    <span>({{count($product->reviews)}} reviews)</span>
                                 </div>
                                 <div class="product__details__price price_main"> {{ $product->unit_price }}</div>
                                 <p>{{ $product->description}}</p>
@@ -157,12 +191,14 @@
                     <div class="product__details__text">
                         <h3>{{ $product->name }}</h3>
                         <div class="product__details__rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-half-o"></i>
-                            <span>(18 reviews)</span>
+                            @for($i = 1 ; $i <= 5 ; $i++)
+                                @if($i <= $starRate)
+                                    <i class="fa fa-star"></i>
+                                @else
+                                    <i class="fa fa-star-o"></i>
+                                @endif
+                            @endfor         
+                            <span>({{ count((array)$product->reviews) - 1 }} reviews)</span>
                         </div>
                         <div class="product__details__price"> {{ $product->unit_price }}</div>
                         <p>{{ $product->description}}</p>
@@ -306,41 +342,7 @@
                                     <div class="tab-pane" id="tabs-3" role="tabpanel">
                                         <div class="container d-flex flex-column mt-3">
                                              {{-- caculate rating stars --}}
-                                             @php
-                                             $star1 = 0;
-                                             $star2 = 0;
-                                             $star3 = 0;
-                                             $star4 = 0;
-                                             $star5 = 0;
-                                             if(isset($product->reviews)){
-                                                 foreach ($product->reviews as $review) {
-                                                     switch($review->stars){
-                                                         case '1':
-                                                             $star1++;
-                                                             break;
-                                                         case '2':
-                                                             $star2++;
-                                                             break;
-                                                         case '3':
-                                                             $star3++;
-                                                             break;
-                                                         case '4':
-                                                             $star4++;
-                                                             break;
-                                                         case '5':
-                                                             $star5++;
-                                                             break;
-                                                     }
-                                                 }
-                                             }
-                                             $totalReviews = $star1 + $star2 + $star3 + $star4 + $star5;
-                                             $totalStars = $star1*1 + $star2*2 + $star3*3 + $star4*4 + $star5*5;
-                                             if($totalReviews != 0){
-                                                $starRate =  $totalStars / $totalReviews;
-                                             }else{
-                                                $starRate = 0;
-                                             }
-                                         @endphp
+                                            
                                             <div class="row d-flex justify-content-center">
                                                 <div class="col-sm-3 mr-5">
                                                     <div class="rating-block">

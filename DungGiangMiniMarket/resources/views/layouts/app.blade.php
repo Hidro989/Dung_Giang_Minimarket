@@ -175,7 +175,7 @@
                             <li class="active"><a href="{{ route('/') }}">Trang chủ</a></li>
 
 
-                            <li><a href="./shop-grid.html">Cửa hàng</a></li>
+                            <li><a href="/shop-grid">Cửa hàng</a></li>
                             <li><a href="{{url('/contact')}}">Liên hệ</a></li>
 
 
