@@ -153,7 +153,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <a href="#" class="primary-btn" id="hui_add_to_cart" data-product-id="{{$product->id}}" data-user-id="{{$user->id}}">Thêm vào giỏ hàng</a>
+                                <a href="#" class="primary-btn" id="hui_add_to_cart" data-product-id="{{$product->id}}" data-user-id="{{ ($user !== null) ? $user->id : -1 }}">Thêm vào giỏ hàng</a>
                                 <ul>
                                     <li><b >Kho</b> <span class="total_stock">{{ $product->stock}}</span></li>
                                     <li><b>Cân nặng</b> <span>{{$product->weight}}</span> kg</li>
@@ -260,7 +260,6 @@
                             </div>
                         </div>
                         <a href="#" class="primary-btn">Thêm vào giỏ hàng</a>
-                        <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
                         <ul>
                             <li><b>Kho :</b> <span class="total_stock">{{ $product->stock}}</span></li>
                             <li><b>Cân nặng :</b> <span>{{$product->weight}}</span> kg</li>

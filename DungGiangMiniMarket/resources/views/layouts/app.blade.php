@@ -3,7 +3,29 @@
     use Illuminate\Support\Facades\DB;
     $user = Cookie::get('user');
     $user = isset($user) && (json_decode($user) !== null) ? json_decode($user) : null;
-    $number_cart_item = DB::table('cart_items')->where('user_id', $user->id)->count();
+    $list_orders = array();
+    if($user !== null) {
+        $number_cart_item = DB::table('cart_items')->where('user_id', $user->id)->count();
+
+        $orders = DB::table('orders')->where('user_id', $user->id)->get();
+    
+        foreach($orders as $order) {
+
+            $order_details = DB::table('order_details')
+            ->join('products', 'order_details.product_id', '=', 'products.id')
+            ->select('order_details.*', 'products.name', 'products.unit_price', 'products.featured_image')
+            ->where('order_details.order_id', $order->id)
+            ->get();
+
+            $arr = json_decode(json_encode ( $order ) , true);
+            foreach($order_details as $detail) {
+                if( $order->id == $detail->order_id ){
+                    $arr['order_details'][] = $detail;
+                }
+            }
+            $list_orders[] = $arr;
+        }
+    }
 @endphp
 <!DOCTYPE html>
 <html lang="en">
@@ -50,7 +72,9 @@
         </div>
         <div class="humberger__menu__cart">
             <ul>
-                <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>{{$number_cart_item}}</span></a></li>
+                <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>@isset($user)
+                    {{$number_cart_item}}
+                @endisset</span></a></li>
             </ul>
             <div class="header__cart__price">Vật phẩm: <span>$150.00</span></div>
         </div>
@@ -71,6 +95,10 @@
                             <i class="fa fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                             Thông tin tài khoản
                         </a>
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#order">
+                            <i class="fa fa-cart-plus fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Đơn mua
+                        </a>
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#changePass">
                             <i class="fa fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                             Đổi mật khẩu
@@ -89,14 +117,6 @@
             <ul>
                 <li class="active"><a href="./index.html">Trang chủ</a></li>
                 <li><a href="/shop-grid">Cửa hàng</a></li>
-                <li><a href="#">Trang</a>
-                    <ul class="header__menu__dropdown">
-                        <li><a href="./shop-details.html">Shop Details</a></li>
-                        <li><a href="{{ route('user.cart.index') }}">Giỏ hàng</a></li>
-                        <li><a href="./checkout.html">Check Out</a></li>
-                        <li><a href="./blog-details.html">Blog Details</a></li>
-                    </ul>
-                </li>
                 <li><a href="./contact.html">Liên hệ</a></li>
             </ul>
         </nav>
@@ -144,6 +164,10 @@
                                             <i class="fa fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                             Thông tin tài khoản
                                         </a>
+                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#order">
+                                            <i class="fa fa-cart-plus fa-sm fa-fw mr-2 text-gray-400"></i>
+                                            Đơn mua
+                                        </a>
                                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#changePass">
                                             <i class="fa fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                             Đổi mật khẩu
@@ -186,7 +210,7 @@
                 <div class="col-lg-3">
                     <div class="header__cart">
                         <ul>
-                            <li><a href="{{ route('user.cart.index') }}"><i class="fa fa-shopping-bag"></i> <span>{{$number_cart_item}}</span></a></li>
+                            <li><a href="{{ route('user.cart.index', $user->id ) }}"><i class="fa fa-shopping-bag"></i> <span>{{$number_cart_item}}</span></a></li>
                         </ul>
                         {{-- <div class="header__cart__price">Vật phẩm: <span>200k</span></div> --}}
                     </div>
@@ -327,50 +351,214 @@
             </div>
         </div>
     </div>
-<div class="modal fade" id="changePass" tabindex="-1" role="dialog" aria-labelledby="changePassword"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="changePassword">Đổi mật khẩu</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form class="needs-validation" id="changePasswordForm">
-                    @csrf
-                    <input type="hidden" name="user_id" value="{{ $user->id }}">
-                    <div class="form-group">
-                        <label for="oldPass">Mật khẩu cũ</label>
-                        <input type="password" class="form-control" id="oldPass" name="old_password" placeholder="Nhập mật khẩu cũ" value="" required>
-                        <div class="invalid-feedback">
-                            Looks good!
-                          </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="newPass">Mật khẩu mới</label>
-                        <input type="password" class="form-control" id="newPass" name="password" placeholder="Nhập mật khẩu mới" value="" required>
-                        <div class="invalid-feedback">
-                            Looks good!
-                          </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="password-confirmation">Xác nhận mật khẩu</label>
-                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Xác thực mật khẩu" value="">
-                        <div class="invalid-feedback">
-                            Looks good!
-                          </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
-                <button class="btn btn-primary" type="button" id="btnChangePassword">Đổi mật khẩu</button>
+</div>
+    
+    <div class="modal fade" id="changePass" tabindex="-1" role="dialog" aria-labelledby="changePassword"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="changePassword">Đổi mật khẩu</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="needs-validation" id="changePasswordForm">
+                        @csrf
+                        <input type="hidden" name="user_id" value="{{ $user->id }}">
+                        <div class="form-group">
+                            <label for="oldPass">Mật khẩu cũ</label>
+                            <input type="password" class="form-control" id="oldPass" name="old_password" placeholder="Nhập mật khẩu cũ" value="" required>
+                            <div class="invalid-feedback">
+                                
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="newPass">Mật khẩu mới</label>
+                            <input type="password" class="form-control" id="newPass" name="password" placeholder="Nhập mật khẩu mới" value="" required>
+                            <div class="invalid-feedback">
+                                
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password-confirmation">Xác nhận mật khẩu</label>
+                            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Xác thực mật khẩu" value="">
+                            <div class="invalid-feedback">
+                                
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
+                    <button class="btn btn-primary" type="button" id="btnChangePassword">Đổi mật khẩu</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    <div class="modal fade" id="order" tabindex="-1" role="dialog" aria-labelledby="order-content"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="order-content">Đơn mua</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist" style="overflow-x: auto;overflow-y: hidden;white-space: nowrap; flex-wrap:nowrap">
+                        <li class="nav-item">
+                        <a class="nav-link active" id="awaiting-confirmation-tab" data-toggle="tab" href="#awaiting-confirmation" role="tab" aria-controls="awaiting-confirmation" aria-selected="true">Chờ xác nhận</a>
+                        </li>
+                        <li class="nav-item">
+                        <a class="nav-link" id="delivering-tab" data-toggle="tab" href="#delivering" role="tab" aria-controls="delivering" aria-selected="false">Đang giao</a>
+                        </li>
+                        <li class="nav-item">
+                        <a class="nav-link" id="delivered-tab" data-toggle="tab" href="#delivered" role="tab" aria-controls="delivered" aria-selected="false">Đã giao</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="return-tab" data-toggle="tab" href="#return" role="tab" aria-controls="return" aria-selected="false">Hoàn trả</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="cancel-tab" data-toggle="tab" href="#cancel" role="tab" aria-controls="cancel" aria-selected="false">Hủy</a>
+                        </li>
+                    </ul>
+                    
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div class="tab-pane fade active show" id="awaiting-confirmation" role="tabpanel" aria-labelledby="awaiting-confirmation-tab">
+
+                            @foreach ($list_orders as $item)
+                                @if ($item['status'] == 0)
+                                    <div class="d-flex flex-column">
+                                        @foreach ($item['order_details'] as $detail)
+                                            <div class="d-flex p-2">
+                                                <img src="{{$detail->featured_image}}" alt="" height="40" width="40">
+                                                <div class="ml-2 w-100">
+                                                    <p class="text-dark font-weight-bold w-100">{{$detail->name}}</p>
+                                                    <div class="d-flex justify-content-between">
+                                                        <span>x {{$detail->quantity}}</span>
+                                                        <span class="hui_price">{{$detail->unit_price}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        @endforeach
+                                    </div>
+                                    <p>Số tiền phải trả: <span class="hui_price">{{$item['total_price']}}</span></p>
+                                @endif
+                            
+                            
+                            @endforeach
+                            
+                        </div>
+                        <div class="tab-pane fade" id="delivering" role="tabpanel" aria-labelledby="delivering-tab">
+                            @foreach ($list_orders as $item)
+                                @if ($item['status'] == 1)
+                                    <div class="d-flex flex-column">
+                                        @foreach ($item['order_details'] as $detail)
+                                            <div class="d-flex p-2">
+                                                <img src="{{$detail->featured_image}}" alt="" height="40" width="40">
+                                                <div class="ml-2 w-100">
+                                                    <p class="text-dark font-weight-bold w-100">{{$detail->name}}</p>
+                                                    <div class="d-flex justify-content-between">
+                                                        <span>x {{$detail->quantity}}</span>
+                                                        <span class="hui_price">{{$detail->unit_price}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        @endforeach
+                                    </div>
+                                    <p>Số tiền phải trả: <span class="hui_price">{{$item['total_price']}}</span></p>
+                                @endif
+                            
+                            
+                            @endforeach
+                        </div>
+                        <div class="tab-pane fade" id="delivered" role="tabpanel" aria-labelledby="delivered-tab">
+                            @foreach ($list_orders as $item)
+                                @if ($item['status'] == 2)
+                                    <div class="d-flex flex-column">
+                                        @foreach ($item['order_details'] as $detail)
+                                            <div class="d-flex p-2">
+                                                <img src="{{$detail->featured_image}}" alt="" height="40" width="40">
+                                                <div class="ml-2 w-100">
+                                                    <p class="text-dark font-weight-bold w-100">{{$detail->name}}</p>
+                                                    <div class="d-flex justify-content-between">
+                                                        <span>x {{$detail->quantity}}</span>
+                                                        <span class="hui_price">{{$detail->unit_price}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        @endforeach
+                                    </div>
+                                    <p>Số tiền phải trả: <span class="hui_price">{{$item['total_price']}}</span></p>
+                                @endif
+                            
+                            
+                            @endforeach
+                        </div>
+                        <div class="tab-pane fade" id="return" role="tabpanel" aria-labelledby="return-tab">
+                            @foreach ($list_orders as $item)
+                                @if ($item['status'] == 3)
+                                    <div class="d-flex flex-column">
+                                        @foreach ($item['order_details'] as $detail)
+                                            <div class="d-flex p-2">
+                                                <img src="{{$detail->featured_image}}" alt="" height="40" width="40">
+                                                <div class="ml-2 w-100">
+                                                    <p class="text-dark font-weight-bold w-100">{{$detail->name}}</p>
+                                                    <div class="d-flex justify-content-between">
+                                                        <span>x {{$detail->quantity}}</span>
+                                                        <span class="hui_price">{{$detail->unit_price}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        @endforeach
+                                    </div>
+                                    <p>Số tiền phải trả: <span class="hui_price">{{$item['total_price']}}</span></p>
+                                @endif
+                            
+                            
+                            @endforeach
+                        </div>
+                        <div class="tab-pane fade" id="cancel" role="tabpanel" aria-labelledby="cancel-tab">
+                            @foreach ($list_orders as $item)
+                                @if ($item['status'] == 4)
+                                    <div class="d-flex flex-column">
+                                        @foreach ($item['order_details'] as $detail)
+                                            <div class="d-flex p-2">
+                                                <img src="{{$detail->featured_image}}" alt="" height="40" width="40">
+                                                <div class="ml-2 w-100">
+                                                    <p class="text-dark font-weight-bold w-100">{{$detail->name}}</p>
+                                                    <div class="d-flex justify-content-between">
+                                                        <span>x {{$detail->quantity}}</span>
+                                                        <span class="hui_price">{{$detail->unit_price}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        @endforeach
+                                    </div>
+                                    <p>Số tiền phải trả: <span class="hui_price">{{$item['total_price']}}</span></p>
+                                @endif
+                            
+                            
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Thoát</button>
+                </div>
+            </div>
+        </div>
+    </div>
     @endif
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>

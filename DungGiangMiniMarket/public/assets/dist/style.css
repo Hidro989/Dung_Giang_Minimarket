@@ -2126,7 +2126,7 @@ ol {
 	color: #dd2222;
 }
 
-.checkout__input input {
+.checkout__input input:not(input[type="checkbox"], input[type="radio"]) {
 	width: 100%;
 	height: 46px;
 	border: 1px solid #ebebeb;

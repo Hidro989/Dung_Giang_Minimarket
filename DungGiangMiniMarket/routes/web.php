@@ -1,12 +1,11 @@
 <?php
 
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserController;
-use App\Models\Product;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -28,10 +27,6 @@ Route::get('/storage/{filename}', function ($filename) {
     }
     return response()->file($path);
 })->where('filename', '.*');
-
-Route::get('/checkout', function () {
-    return view('checkout');
-});
 
 Route::get('/contact', function () {
     return view('contact');
@@ -58,16 +53,20 @@ Route::middleware('loginAdmin')->group( function () {
         Route::resource('category', CategoryController::class);
         Route::get('dashboard', [UserController::class, 'index'])->name('dashboard');
         Route::resource('product', ProductController::class);
+        Route::get('order/index', [OrderController::class, 'index'])->name('order.index');
+        Route::get('order/update_status', [OrderController::class, 'update_status'])->name('order.update_status');
     } );
 } );
 
 Route::middleware('loginUser')->group( function () {
     Route::get('/', [UserController::class, 'home'])->name('/');
     Route::group ([ 'prefix' => 'user', 'as' => 'user.' ], function () {
-        Route::get('cart/index', [CartController::class, 'index'])->name('cart.index');
+        Route::get('cart/index/{user_id}', [CartController::class, 'index'])->name('cart.index');
         Route::get('cart/add', [CartController::class, 'add'])->name('cart.add');
         Route::get('cart/update', [CartController::class, 'update'])->name('cart.update');
         Route::get('cart/destroy', [CartController::class, 'destroy'])->name('cart.destroy');
+        Route::get('order/checkout/{user_id}', [OrderController::class, 'checkout'])->name('order.checkout');
+        Route::post('order/stored', [OrderController::class, 'stored'])->name('order.stored');
         Route::post('updateInfo', [UserController::class, 'updateInformation'])->name('updateInfo');
     } );
 } );
