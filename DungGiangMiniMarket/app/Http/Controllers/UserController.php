@@ -83,15 +83,22 @@ class UserController extends Controller
 
     public function home() {
         $categories = Category::all();
-        $products = Product::with('variants')->get();
-        $ratestProducts = Product::select('products.*', DB::raw('COUNT(reviews.id) as review_count'))
+        $products = Product::select('products.*', DB::raw('COUNT(reviews.id) as review_count'), DB::raw('AVG(reviews.stars) as star_rate'))
+        ->groupBy('products.id')
+        ->leftJoin('reviews', 'products.id', '=', 'reviews.product_id')
+        ->get();
+        $ratestProducts = Product::select('products.*', DB::raw('COUNT(reviews.id) as review_count'), DB::raw('AVG(reviews.stars) as star_rate'))
         ->join('reviews', 'products.id', '=', 'reviews.product_id')
         ->groupBy('products.id')
         ->orderByDesc('review_count')
-        ->with('variants')
         ->take(6)
         ->get();
-        $lastProducts = Product::orderBy('id','desc')->take(6)->get();
+        $lastProducts = Product::select('products.*', DB::raw('COUNT(reviews.id) as review_count'), DB::raw('AVG(reviews.stars) as star_rate'))
+        ->leftJoin('reviews', 'products.id', '=', 'reviews.product_id')
+        ->groupBy('products.id')
+        ->orderBy('id','desc')
+        ->take(6)
+        ->get();
         $this->formatProducts($lastProducts);
         $this->formatProducts($products);
         $this->formatProducts($ratestProducts);

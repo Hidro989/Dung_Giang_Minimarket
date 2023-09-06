@@ -45,7 +45,7 @@ class OrderController extends Controller
             abort(404);
         }
 
-        if( $request->input('cart_items') !== null) {
+        if( $request->input('cart_items') == null) {
             return redirect()->route('/');
         }
         // dd($request->all());
@@ -71,7 +71,7 @@ class OrderController extends Controller
             ->join('products', 'cart_items.product_id', '=', 'products.id')
             ->select( 'cart_items.*', 'products.name', 'products.unit_price' )
             ->first();
- 
+            
             $order_detail_data = [
                 'order_id' => $order_id,
                 'product_id' => $item->product_id,

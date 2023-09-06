@@ -68,6 +68,16 @@
                                                     </div>
                                                     <div class="latest-product__item__text">
                                                         <h6>{{ $lastProducts[$i]->name}}</h6>
+                                                        <div class="product__details__rating">
+                                                            @for($j = 1 ; $j <= 5 ; $j++)
+                                                                @if($j <= $lastProducts[$i]->star_rate)
+                                                                    <i class="fa fa-star" style="color:#f9ca24"></i>
+                                                                @else
+                                                                <i class="fa fa-star-o" style="color:#f9ca24"></i>
+                                                                @endif
+                                                            @endfor
+                                                            <span>({{ $lastProducts[$i]->review_count }})</span>                       
+                                                        </div>
                                                         <span>{{ $lastProducts[$i]->unit_price}}</span>
                                                     </div>
                                                 </a>
@@ -83,6 +93,16 @@
                                                     </div>
                                                     <div class="latest-product__item__text">
                                                         <h6>{{ $lastProducts[$i]->name}}</h6>
+                                                        <div class="product__details__rating">
+                                                            @for($j = 1 ; $j <= 5 ; $j++)
+                                                                @if($j <= $lastProducts[$i]->star_rate)
+                                                                    <i class="fa fa-star" style="color:#f9ca24"></i>
+                                                                @else
+                                                                <i class="fa fa-star-o" style="color:#f9ca24"></i>
+                                                                @endif
+                                                            @endfor
+                                                            <span>({{ $lastProducts[$i]->review_count }})</span>                                    
+                                                        </div>
                                                         <span>{{ $lastProducts[$i]->unit_price}}</span>
                                                     </div>
                                                 </a>
@@ -135,6 +155,16 @@
                                     </div>
                                     <div class="product__item__text">
                                         <h6><a href="{{route('product.show', $product->id)}}">{{ $product->name}}</a></h6>
+                                        <div class="product__details__rating">
+                                            @for($j = 1 ; $j <= 5 ; $j++)
+                                                @if($j <= $product->star_rate)
+                                                    <i class="fa fa-star" style="color:#f9ca24"></i>
+                                                @else
+                                                <i class="fa fa-star-o" style="color:#f9ca24"></i>
+                                                @endif
+                                            @endfor
+                                            <span>({{ $product->review_count }})</span>                                    
+                                        </div>
                                         <h5>{{ $product->unit_price}}</h5>
                                     </div>
                                 </div>

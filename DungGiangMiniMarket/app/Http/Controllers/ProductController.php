@@ -22,22 +22,35 @@ class ProductController extends Controller
     public function search(Request $request){
         $key = $request->input('key');
         $categories = Category::all();
-        $products = Product::where(function ($query) use ($key){
+        $products = Product::select('products.*', DB::raw('COUNT(reviews.id) as review_count'), DB::raw('AVG(reviews.stars) as star_rate'))
+        ->groupBy('products.id')
+        ->leftJoin('reviews', 'products.id', '=', 'reviews.product_id')
+        ->where(function ($query) use ($key){
             $query->where('name', 'LIKE', '%' . $key . '%');
         })->with('variants')->paginate(10);
         $lastProducts = Product::orderBy('id','desc')->take(6)->get();
         $this->formatProducts($lastProducts);
         $this->formatProducts($products);
-        return view('shop-grid',compact('products','categories','astProducts'));
+        return view('shop-grid',compact('products','categories','lastProducts'));
     }
     public function shop_grid($catetory_id){
         if($catetory_id == 'all'){
-            $products = Product::with('variants')->paginate(10);
+            $products = Product::select('products.*', DB::raw('COUNT(reviews.id) as review_count'), DB::raw('AVG(reviews.stars) as star_rate'))
+            ->groupBy('products.id')
+            ->leftJoin('reviews', 'products.id', '=', 'reviews.product_id')->paginate(10);
         }else{
-            $products = Product::where('category_id',$catetory_id)->with('variants')->paginate(10);
+            $products = Product::select('products.*', DB::raw('COUNT(reviews.id) as review_count'), DB::raw('AVG(reviews.stars) as star_rate'))
+            ->groupBy('products.id')
+            ->leftJoin('reviews', 'products.id', '=', 'reviews.product_id')
+            ->where('category_id',$catetory_id)->with('variants')->paginate(10);
         }
         $categories = Category::all();
-        $lastProducts = Product::orderBy('id','desc')->take(6)->get();
+        $lastProducts = Product::select('products.*', DB::raw('COUNT(reviews.id) as review_count'), DB::raw('AVG(reviews.stars) as star_rate'))
+        ->leftJoin('reviews', 'products.id', '=', 'reviews.product_id')
+        ->groupBy('products.id')
+        ->orderBy('id','desc')
+        ->take(6)
+        ->get();
         $this->formatProducts($lastProducts);
         $this->formatProducts($products);
         return view('shop-grid',compact('products','categories','lastProducts'));       
