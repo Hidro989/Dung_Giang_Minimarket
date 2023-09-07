@@ -69,7 +69,7 @@
             
             <div class="form-group">
                 <label for="weight">Cân nặng: (Kg)</label>
-                <input type="number" name="weight" class="form-control" value="{{ old('weight') }}">
+                <input type="text" name="weight" class="form-control" value="{{ old('weight') }}">
             </div>            
 
             <div class="form-group d-flex align-items-center ">

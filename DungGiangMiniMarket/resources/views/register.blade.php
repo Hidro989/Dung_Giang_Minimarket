@@ -204,7 +204,8 @@
                                 <i class="fa fa-lock text-muted"></i>
                             </span>
                         </div>
-                        <input id="passwordConfirmation" type="password" name="password_confirmation" placeholder="Xác thực mật khẩu" class="form-control @error('password') is-invalid @enderror bg-white border-left-0 border-md" value="{{ old('password_confirmation') }}">
+                        <input id="passwordConfirmation" type="password" name="
+                        " placeholder="Xác thực mật khẩu" class="form-control @error('password') is-invalid @enderror bg-white border-left-0 border-md" value="{{ old('password_confirmation') }}">
                         @error('password')
                             <div class="invalid-feedback">
                             {{ $message }}
