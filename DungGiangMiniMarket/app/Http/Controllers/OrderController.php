@@ -9,7 +9,11 @@ class OrderController extends Controller
 {
 
     public function index() {
-        $orders = DB::table('orders')->get();
+        $orders = DB::table('orders')
+        ->join('users', 'users.id', '=', 'orders.user_id')
+        ->select('orders.*', 'users.fullname', 'users.date_of_birth', 'users.gender', 'users.phone')
+        ->get();
+
         $order_details = DB::table('order_details')
         ->join('products', 'order_details.product_id', '=', 'products.id')
         ->select('order_details.*', 'products.name', 'products.unit_price', 'products.featured_image')
@@ -48,7 +52,6 @@ class OrderController extends Controller
         if( $request->input('cart_items') == null) {
             return redirect()->route('/');
         }
-        // dd($request->all());
 
         $address = '';
         if( $request->input('sub_address') !== null ) {
@@ -60,6 +63,7 @@ class OrderController extends Controller
             'user_id' => $request->input('user_id'),
             'status' => 0,
             'total_price' => 0,
+            'created_date' => date('Y-m-d'),
             'address' => $address,
         ];
 
@@ -85,7 +89,7 @@ class OrderController extends Controller
             DB::table('cart_items')->delete($id);
         }
 
-        DB::table('orders')->update(['total_price' => $total_order_price]);
+        DB::table('orders')->where('id', $order_id)->update(['total_price' => $total_order_price]);
         
         return view('checkout-success', compact('order_id'));
     }
@@ -93,5 +97,18 @@ class OrderController extends Controller
     public function update_status( Request $request ) {
         DB::table('orders')->where('id', $request->get('id'))->update(['status' => $request->get('new_status')]);
         return redirect()->back();
+    }
+
+    public function get_12month_revenue(){
+        $results = DB::table('orders')
+        ->select(DB::raw('YEAR(created_date) as year'), DB::raw('MONTH(created_date) as month'), DB::raw('SUM(total_price) as revenue'))
+        ->where('created_date', '>=', now()->subMonths(12))
+        ->where('status', 2)
+        ->groupBy('year', 'month')
+        ->orderBy('year', 'asc')
+        ->orderBy('month', 'asc')
+        ->get();
+
+        return response()->json($results);
     }
 }

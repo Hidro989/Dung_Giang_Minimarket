@@ -14,6 +14,11 @@ class UserController extends Controller
 {
     private $user;
 
+    public function get_all_user(){
+        $users = DB::table('users')->where('role', 1)->get();
+        return view('admin.user.index', compact('users'));
+    }
+
     private function formatProducts( $products ){
         foreach($products as $product){
             if(count($product->variants) != 0 ){
@@ -78,7 +83,32 @@ class UserController extends Controller
     }
 
     public function index() {
-        return view('admin.index');
+        $month = date('m');
+
+        $monthly_revenue = DB::table('orders')
+        ->where('status', 2)
+        ->whereMonth('created_date', $month)
+        ->sum('total_price');
+
+        $total_orders_delivered = DB::table('orders')
+        ->where('status', 2)
+        ->count();
+
+        $total_orders = DB::table('orders')
+        ->count();
+
+        $date_revenue = DB::table('orders')
+        ->where('status', 2)
+        ->whereDate('created_date', date('Y-m-d'))
+        ->sum('total_price');
+
+        $order_awaiting_confirmation = DB::table('orders')
+        ->where('status', 0)
+        ->count();
+
+        $percent_of_total_order = ($total_orders_delivered / $total_orders) * 100;
+
+        return view('admin.index', compact('monthly_revenue', 'date_revenue', 'order_awaiting_confirmation', 'percent_of_total_order'));
     }
 
     public function home() {
@@ -267,6 +297,20 @@ class UserController extends Controller
         $this->user = DB::table('users')->where('id', $user_id)->first();
         $cookie = cookie('user', json_encode($this->user), 1440);
         return response()->json(['success' => 'Cập nhật thông tin thành công'])->cookie($cookie);;
+    }
+
+
+    public function destroy(Request $request)
+    {
+        $id = $request->input('id');
+        try {
+            $user = User::findOrFail($id);
+            $user->delete();
+        }catch(\Throwable $th) {
+            return redirect()->route('admin.user.index')->with(['error' => 'Xoá loại hàng thất bại']);
+        }
+
+        return redirect()->route('admin.user.index')->with(['success' => 'Xoá loại hàng thành công']);
     }
 
 }

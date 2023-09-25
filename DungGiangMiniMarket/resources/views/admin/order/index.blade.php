@@ -9,8 +9,6 @@
 @section('content')
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Quản lý loại hàng</h1>
-    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-            class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
 </div>
 
 @if (session('success'))
@@ -62,6 +60,7 @@
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
+                                    <th>Khách hàng</th>
                                     <th>Sản phẩm</th>
                                     <th>Doanh thu đơn hàng</th>
                                     <th>Thời gian tạo</th>
@@ -70,9 +69,29 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                
                                 @foreach ($list_orders as $item)
                                     @if($item['status'] === 0) 
                                         <tr>
+                                            <td>
+                                                <div class="d-flex flex-column">
+                                                    <span><strong>Họ và tên:</strong> {{$item['fullname']}}</span>
+                                                    <span><strong>Ngày sinh:</strong> {{$item['date_of_birth']}}</span>
+                                                    <span><strong>Giới tính:</strong> @switch($item['gender'])
+                                                        @case(0)
+                                                            {{'Nam'}}
+                                                            @break
+                                                        @case(1)
+                                                            {{'Nữ'}}
+                                                            @break
+                                                        @default
+                                                            {{'Khác'}}
+                                                            
+                                                    @endswitch</span>
+                                                    <span><strong>Địa chỉ nhận hàng:</strong> {{$item['address']}}</span>
+                                                    <span><strong>Số điện thoại:</strong> {{$item['phone']}}</span>
+                                                </div>
+                                            </td>
                                             <td>
                                                 @foreach ($item['order_details'] as $detail)
                                                     <div class="d-flex">
@@ -101,6 +120,7 @@
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
+                                    <th>Khách hàng</th>
                                     <th>Sản phẩm</th>
                                     <th>Doanh thu đơn hàng</th>
                                     <th>Thời gian tạo</th>
@@ -112,6 +132,15 @@
                                 @foreach ($list_orders as $item)
                                     @if($item['status'] === 1) 
                                         <tr>
+                                            <td>
+                                                <div class="d-flex flex-column">
+                                                    <span><strong>Họ và tên:</strong> {{$item['fullname']}}</span>
+                                                    <span><strong>Ngày sinh:</strong> {{$item['date_of_birth']}}</span>
+                                                    <span><strong>Giới tính:</strong> {{$item['gender']}}</span>
+                                                    <span><strong>Địa chỉ nhận hàng:</strong> {{$item['address']}}</span>
+                                                    <span><strong>Số điện thoại:</strong> {{$item['phone']}}</span>
+                                                </div>
+                                            </td>
                                             <td>
                                                 @foreach ($item['order_details'] as $detail)
                                                     <div class="d-flex">
@@ -139,6 +168,7 @@
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
+                                    <th>Khách hàng</th>
                                     <th>Sản phẩm</th>
                                     <th>Doanh thu đơn hàng</th>
                                     <th>Thời gian tạo</th>
@@ -150,6 +180,15 @@
                                 @foreach ($list_orders as $item)
                                     @if($item['status'] === 2) 
                                         <tr>
+                                            <td>
+                                                <div class="d-flex flex-column">
+                                                    <span><strong>Họ và tên:</strong> {{$item['fullname']}}</span>
+                                                    <span><strong>Ngày sinh:</strong> {{$item['date_of_birth']}}</span>
+                                                    <span><strong>Giới tính:</strong> {{$item['gender']}}</span>
+                                                    <span><strong>Địa chỉ nhận hàng:</strong> {{$item['address']}}</span>
+                                                    <span><strong>Số điện thoại:</strong> {{$item['phone']}}</span>
+                                                </div>
+                                            </td>
                                             <td>
                                                 @foreach ($item['order_details'] as $detail)
                                                     <div class="d-flex">
@@ -177,6 +216,7 @@
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
+                                    <th>Khách hàng</th>
                                     <th>Sản phẩm</th>
                                     <th>Doanh thu đơn hàng</th>
                                     <th>Thời gian tạo</th>
@@ -188,6 +228,15 @@
                                 @foreach ($list_orders as $item)
                                     @if($item['status'] === 3) 
                                         <tr>
+                                            <td>
+                                                <div class="d-flex flex-column">
+                                                    <span><strong>Họ và tên:</strong> {{$item['fullname']}}</span>
+                                                    <span><strong>Ngày sinh:</strong> {{$item['date_of_birth']}}</span>
+                                                    <span><strong>Giới tính:</strong> {{$item['gender']}}</span>
+                                                    <span><strong>Địa chỉ nhận hàng:</strong> {{$item['address']}}</span>
+                                                    <span><strong>Số điện thoại:</strong> {{$item['phone']}}</span>
+                                                </div>
+                                            </td>
                                             <td>
                                                 @foreach ($item['order_details'] as $detail)
                                                     <div class="d-flex">
@@ -215,6 +264,7 @@
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
+                                    <th>Khách hàng</th>
                                     <th>Sản phẩm</th>
                                     <th>Doanh thu đơn hàng</th>
                                     <th>Thời gian tạo</th>
@@ -225,6 +275,15 @@
                                 @foreach ($list_orders as $item)
                                     @if($item['status'] === 4) 
                                         <tr>
+                                            <td>
+                                                <div class="d-flex flex-column">
+                                                    <span><strong>Họ và tên:</strong> {{$item['fullname']}}</span>
+                                                    <span><strong>Ngày sinh:</strong> {{$item['date_of_birth']}}</span>
+                                                    <span><strong>Giới tính:</strong> {{$item['gender']}}</span>
+                                                    <span><strong>Địa chỉ nhận hàng:</strong> {{$item['address']}}</span>
+                                                    <span><strong>Số điện thoại:</strong> {{$item['phone']}}</span>
+                                                </div>
+                                            </td>
                                             <td>
                                                 @foreach ($item['order_details'] as $detail)
                                                     <div class="d-flex">
