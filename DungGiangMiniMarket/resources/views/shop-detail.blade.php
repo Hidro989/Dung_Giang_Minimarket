@@ -641,6 +641,10 @@
                                 alert(response.responseJSON.error);
                             }
                         });
+                    }else{
+                        if( true == confirm("Vui lòng đăng nhập để mua hàng!!")) {
+                            location.replace('http://127.0.0.1:8000/login');
+                        }
                     }
             });
 

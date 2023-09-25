@@ -27,14 +27,56 @@ function number_format(number, decimals, dec_point, thousands_sep) {
   return s.join(dec);
 }
 
+function formatCurrency(currency) {
+  const VND = new Intl.NumberFormat('vi-VN', {
+  style: 'currency',
+  currency: 'VND',
+  });
+  return VND.format(currency);
+}
+
+let data = [];
+let newData = [];
+
+function loadDoc(url) {
+  const xhttp = new XMLHttpRequest();
+  xhttp.onload = function() {
+    if ( xhttp.status == 200) {
+      data = JSON.parse(xhttp.responseText);
+      for(let i = 0; i < 12; ++i) {
+        let check = false;
+        for(let j = 0; j < data.length; ++j) {
+          if(data[j].month == (i+1)) {
+            check = true;
+            newData[i] = data[j].revenue;
+            break;
+          }
+        }
+
+        if(check == false) {
+          newData[i] = 0;
+        }else {
+          check = false;
+        }
+      }
+      
+    }
+  };
+  xhttp.open("GET", url, false);
+  xhttp.send();
+}
+
+
+loadDoc('http://127.0.0.1:8000/admin/order/revenue');
+
 // Area Chart Example
 var ctx = document.getElementById("myAreaChart");
 var myLineChart = new Chart(ctx, {
   type: 'line',
   data: {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
     datasets: [{
-      label: "Earnings",
+      label: "Thu nhập",
       lineTension: 0.3,
       backgroundColor: "rgba(78, 115, 223, 0.05)",
       borderColor: "rgba(78, 115, 223, 1)",
@@ -46,7 +88,7 @@ var myLineChart = new Chart(ctx, {
       pointHoverBorderColor: "rgba(78, 115, 223, 1)",
       pointHitRadius: 10,
       pointBorderWidth: 2,
-      data: [0, 10000, 5000, 15000, 10000, 20000, 15000, 25000, 20000, 30000, 25000, 40000],
+      data: newData,
     }],
   },
   options: {
@@ -78,7 +120,7 @@ var myLineChart = new Chart(ctx, {
           padding: 10,
           // Include a dollar sign in the ticks
           callback: function(value, index, values) {
-            return '$' + number_format(value);
+            return formatCurrency(value);
           }
         },
         gridLines: {
@@ -110,9 +152,15 @@ var myLineChart = new Chart(ctx, {
       callbacks: {
         label: function(tooltipItem, chart) {
           var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-          return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
+          return datasetLabel + ': ' + formatCurrency(tooltipItem.yLabel);
         }
       }
     }
   }
 });
+
+let monthlyRevenue = document.querySelector('#monthly_revenue');
+let dateRevenue = document.querySelector('#date_revenue');
+
+monthlyRevenue.innerHTML = formatCurrency(monthlyRevenue.innerHTML);
+dateRevenue.innerHTML = formatCurrency(dateRevenue.innerHTML);

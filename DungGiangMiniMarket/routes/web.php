@@ -53,7 +53,10 @@ Route::middleware('loginAdmin')->group( function () {
     Route::group ([ 'prefix' => 'admin', 'as' => 'admin.' ], function () {
         Route::resource('category', CategoryController::class);
         Route::get('dashboard', [UserController::class, 'index'])->name('dashboard');
+        Route::get('user/index', [UserController::class, 'get_all_user'])->name('user.index');
+        Route::delete('user/destroy', [UserController::class, 'destroy'])->name('user.destroy');
         Route::resource('product', ProductController::class);
+        Route::get('order/revenue', [OrderController::class, 'get_12month_revenue'])->name('order.revenue');
         Route::get('order/index', [OrderController::class, 'index'])->name('order.index');
         Route::get('order/update_status', [OrderController::class, 'update_status'])->name('order.update_status');
     } );
