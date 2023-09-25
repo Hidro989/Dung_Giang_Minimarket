@@ -6,6 +6,13 @@
     $product = true;
     $index = 'active';
 @endphp
+
+@section('styles')
+ <!-- Custom styles for this page -->
+ <link href="{{ asset('assets/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+@endsection
+
+
 @section('content')
 
     <!-- Page Heading -->
