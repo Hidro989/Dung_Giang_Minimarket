@@ -260,10 +260,10 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $id)
     {
-        $data = $request->input();
-        dd($product->attribute_ids);
+        $product = DB::table('products')->find($id);
+        $data = $request->all();
         $rules = [
             'name' => 'required',
             'description' => 'required',
@@ -294,6 +294,40 @@ class ProductController extends Controller
                 ->withInput();
         }
 
+        if(isset($data['is_variant'])){
+           
+        }
+        else{
+            if(isset($data['featured_image'])){
+                $imgPath = Storage::put('public',$data['featured_image']);
+                $imgUrl = Storage::url($imgPath);
+            }else{
+                $imgUrl = $product->featured_image;
+            }
+            if(isset($data['video'])){
+                $videoPath = Storage::put('public',$data['video']);
+                $videoUrl = Storage::url($videoPath);
+            }else{
+                $videoUrl = $product->video;
+            }
+            try {
+                DB::table('products')->where('id', $id)->update([
+                    'category_id'    => $data['category_id'],
+                    'name'           => $data['name'],
+                    'description'    => $data['description'],
+                    'video'          => $videoUrl,
+                    'featured_image' => $imgUrl,
+                    'weight'         => $data['weight'],
+                    'is_variant'     => 0,
+                    'unit_price'     => $data['unit_price'],
+                    'stock'          => $data['stock']
+                ]);
+            }catch(\Throwable $th) {
+                $request->flash();
+                return redirect()->route('admin.product.edit', $id)->withInput();
+            }
+        }
+        return redirect()->route('admin.product.edit', $id)->with('success','Sửa sản phẩm thành công');
     }
 
     /**

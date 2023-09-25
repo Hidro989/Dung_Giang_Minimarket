@@ -39,7 +39,7 @@
                 <label for="category_id">Danh mục</label>
                 <select id="category_id" class="form-select form-control" aria-label="Default select example" name="category_id">
                     @foreach ($categories as $item)
-                        @if($item == $productEdit->category->name)
+                        @if($item->name == $productEdit->category->name)
                             <option value="{{ $item->id}}" selected>{{ $item->name}}</option>
                         @else
                             <option value="{{ $item->id}}">{{ $item->name}}</option>
@@ -75,7 +75,7 @@
             
             <div class="form-group">
                 <label for="weight">Cân nặng: (Kg)</label>
-                <input type="number" name="weight" class="form-control" value="{{ $productEdit->weight }}">
+                <input type="text" name="weight" class="form-control" value="{{ $productEdit->weight }}">
             </div>            
 
             <div class="form-group d-flex align-items-center ">
